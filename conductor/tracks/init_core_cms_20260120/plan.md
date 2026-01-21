@@ -16,7 +16,7 @@
 - [x] Task: Verify Sanity Studio is working and schemas are correct by creating dummy data. acd230f (Note: Studio route established; final data verification requires project ID)
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Sanity.io Setup & Schema Definition' (Protocol in workflow.md)
 
-## Phase 3: Core UI Components
+## Phase 3: Core UI Components [checkpoint: b8e1368]
 - [x] Task: Create a responsive `Navbar` component with links to all main sections. 66fa790
 - [x] Task: Create a `Footer` component with contact info and copyright. 4025bb6
 - [x] Task: Update the root `Layout` to include the Navbar and Footer. 0973f0a
