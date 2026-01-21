@@ -1,0 +1,7 @@
+{
+  "track_id": "init_core_cms_20260120",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-01-20T10:00:00Z",
+  "description": "Initialize the core website structure and set up the Sanity.io CMS integration for research and publications."
+}
