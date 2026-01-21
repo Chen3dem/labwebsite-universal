@@ -12,7 +12,7 @@
 - [x] Task: Create schema for `researchProject` (title, slug, summary, image, description). 97de370
 - [x] Task: Create schema for `publication` (title, authors, journal, year, link). 51ab1af
 - [x] Task: Create schema for `teamMember` (name, role, bio, headshot). 745006a
-- [ ] Task: Create schema for `newsPost` (title, date, body).
+- [x] Task: Create schema for `newsPost` (title, date, body). d93de9a
 - [ ] Task: Verify Sanity Studio is working and schemas are correct by creating dummy data.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Sanity.io Setup & Schema Definition' (Protocol in workflow.md)
 
