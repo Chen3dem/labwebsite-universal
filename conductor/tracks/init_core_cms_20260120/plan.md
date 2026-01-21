@@ -19,7 +19,7 @@
 ## Phase 3: Core UI Components
 - [x] Task: Create a responsive `Navbar` component with links to all main sections. 66fa790
 - [x] Task: Create a `Footer` component with contact info and copyright. 4025bb6
-- [ ] Task: Update the root `Layout` to include the Navbar and Footer.
+- [x] Task: Update the root `Layout` to include the Navbar and Footer. 0973f0a
 - [ ] Task: Create a basic utility function to fetch data from Sanity.
 - [ ] Task: Update the Home page to display a "Hello CUI Lab" message and fetch one item from Sanity (e.g., a news post) to verify integration.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Core UI Components' (Protocol in workflow.md)
