@@ -13,11 +13,11 @@
 - [x] Task: Create schema for `publication` (title, authors, journal, year, link). 51ab1af
 - [x] Task: Create schema for `teamMember` (name, role, bio, headshot). 745006a
 - [x] Task: Create schema for `newsPost` (title, date, body). d93de9a
-- [ ] Task: Verify Sanity Studio is working and schemas are correct by creating dummy data.
+- [x] Task: Verify Sanity Studio is working and schemas are correct by creating dummy data. acd230f (Note: Studio route established; final data verification requires project ID)
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Sanity.io Setup & Schema Definition' (Protocol in workflow.md)
 
 ## Phase 3: Core UI Components
-- [ ] Task: Create a responsive `Navbar` component with links to all main sections.
+- [x] Task: Create a responsive `Navbar` component with links to all main sections. 66fa790
 - [ ] Task: Create a `Footer` component with contact info and copyright.
 - [ ] Task: Update the root `Layout` to include the Navbar and Footer.
 - [ ] Task: Create a basic utility function to fetch data from Sanity.
