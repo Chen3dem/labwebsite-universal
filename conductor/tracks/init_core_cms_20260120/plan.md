@@ -7,7 +7,7 @@
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Environment Configuration & Styling' (Protocol in workflow.md)
 
 ## Phase 2: Sanity.io Setup & Schema Definition
-- [ ] Task: Install Sanity client and dependencies (`next-sanity`, `sanity`).
+- [x] Task: Install Sanity client and dependencies (`next-sanity`, `sanity`). d3aa905
 - [ ] Task: Initialize Sanity configuration (`sanity.config.ts`, `sanity.cli.ts`) and environment variables.
 - [ ] Task: Create schema for `researchProject` (title, slug, summary, image, description).
 - [ ] Task: Create schema for `publication` (title, authors, journal, year, link).
