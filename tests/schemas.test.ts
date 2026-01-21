@@ -1,6 +1,7 @@
 import { researchProject } from '../sanity/schemaTypes/researchProject';
 import { publication } from '../sanity/schemaTypes/publication';
 import { teamMember } from '../sanity/schemaTypes/teamMember';
+import { newsPost } from '../sanity/schemaTypes/newsPost';
 
 describe('Research Project Schema', () => {
   it('has the correct name and title', () => {
@@ -46,5 +47,19 @@ describe('Team Member Schema', () => {
     expect(fieldNames).toContain('role');
     expect(fieldNames).toContain('bio');
     expect(fieldNames).toContain('headshot');
+  });
+});
+
+describe('News Post Schema', () => {
+  it('has the correct name and title', () => {
+    expect(newsPost.name).toBe('newsPost');
+    expect(newsPost.title).toBe('News Post');
+  });
+
+  it('contains all required fields', () => {
+    const fieldNames = newsPost.fields.map(f => f.name);
+    expect(fieldNames).toContain('title');
+    expect(fieldNames).toContain('publishedAt');
+    expect(fieldNames).toContain('body');
   });
 });
