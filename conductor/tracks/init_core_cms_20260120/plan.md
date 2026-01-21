@@ -8,7 +8,7 @@
 
 ## Phase 2: Sanity.io Setup & Schema Definition
 - [x] Task: Install Sanity client and dependencies (`next-sanity`, `sanity`). d3aa905
-- [ ] Task: Initialize Sanity configuration (`sanity.config.ts`, `sanity.cli.ts`) and environment variables.
+- [x] Task: Initialize Sanity configuration (`sanity.config.ts`, `sanity.cli.ts`) and environment variables. af9cfb2
 - [ ] Task: Create schema for `researchProject` (title, slug, summary, image, description).
 - [ ] Task: Create schema for `publication` (title, authors, journal, year, link).
 - [ ] Task: Create schema for `teamMember` (name, role, bio, headshot).
