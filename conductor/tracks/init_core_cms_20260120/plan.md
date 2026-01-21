@@ -10,7 +10,7 @@
 - [x] Task: Install Sanity client and dependencies (`next-sanity`, `sanity`). d3aa905
 - [x] Task: Initialize Sanity configuration (`sanity.config.ts`, `sanity.cli.ts`) and environment variables. af9cfb2
 - [x] Task: Create schema for `researchProject` (title, slug, summary, image, description). 97de370
-- [ ] Task: Create schema for `publication` (title, authors, journal, year, link).
+- [x] Task: Create schema for `publication` (title, authors, journal, year, link). 51ab1af
 - [ ] Task: Create schema for `teamMember` (name, role, bio, headshot).
 - [ ] Task: Create schema for `newsPost` (title, date, body).
 - [ ] Task: Verify Sanity Studio is working and schemas are correct by creating dummy data.
