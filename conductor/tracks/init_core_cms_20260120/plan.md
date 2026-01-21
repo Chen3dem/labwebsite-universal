@@ -21,5 +21,5 @@
 - [x] Task: Create a `Footer` component with contact info and copyright. 4025bb6
 - [x] Task: Update the root `Layout` to include the Navbar and Footer. 0973f0a
 - [x] Task: Create a basic utility function to fetch data from Sanity. fcf143a
-- [ ] Task: Update the Home page to display a "Hello CUI Lab" message and fetch one item from Sanity (e.g., a news post) to verify integration.
+- [x] Task: Update the Home page to display a "Hello CUI Lab" message and fetch one item from Sanity (e.g., a news post) to verify integration. 26c1a29
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Core UI Components' (Protocol in workflow.md)
