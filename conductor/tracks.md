@@ -1,1 +1,1 @@
-# Project Tracks\n\nThis file tracks all major tracks for the project. Each track has its own detailed plan in its respective folder.\n\n---\n\n- [x] **Track: Initialize the core website structure and set up the Sanity.io CMS integration for research and publications.**\n  *Link: [./tracks/init_core_cms_20260120/](./tracks/init_core_cms_20260120/)*
+# Project Tracks\n\nThis file tracks all major tracks for the project. Each track has its own detailed plan in its respective folder.\n\n---\n\n
