@@ -1,0 +1,20 @@
+
+> temp_app@0.1.0 dev
+> next dev
+
+▲ Next.js 16.1.4 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.44.158.210:3000
+
+✓ Starting...
+✓ Ready in 539ms
+ GET / 200 in 622ms (compile: 537ms, render: 86ms)
+ GET / 200 in 24ms (compile: 4ms, render: 20ms)
+ GET / 200 in 20ms (compile: 5ms, render: 15ms)
+ GET / 200 in 19ms (compile: 3ms, render: 15ms)
+ GET / 200 in 22ms (compile: 4ms, render: 18ms)
+ GET / 200 in 21ms (compile: 4ms, render: 17ms)
+ GET / 200 in 20ms (compile: 3ms, render: 17ms)
+ GET / 200 in 22ms (compile: 4ms, render: 18ms)
+ GET / 200 in 19ms (compile: 3ms, render: 16ms)
+ GET / 200 in 23ms (compile: 5ms, render: 18ms)
