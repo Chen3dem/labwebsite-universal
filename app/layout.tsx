@@ -1,25 +1,22 @@
 import type { Metadata } from "next";
-import { Inter, Merriweather } from "next/font/google";
-import "./globals.css";
+import { Montserrat, Playfair_Display } from "next/font/google"; // Playfair Display is serif.
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import FooterWrapper from "@/components/FooterWrapper";
+import "./globals.css";
 
-const inter = Inter({
+const montserrat = Montserrat({
   subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
+  variable: "--font-montserrat",
 });
 
-const merriweather = Merriweather({
-  weight: ["300", "400", "700", "900"],
+const playfair = Playfair_Display({
   subsets: ["latin"],
-  variable: "--font-merriweather",
-  display: "swap",
+  variable: "--font-playfair",
 });
 
 export const metadata: Metadata = {
-  title: "CUI Lab | University of California, Berkeley",
-  description: "Deciphering the Molecular Machines of Cellular Signaling & Lysosomes",
+  title: "CUI Lab",
+  description: "Academic Research Lab",
 };
 
 export default function RootLayout({
@@ -28,15 +25,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${merriweather.variable} h-full`}>
+    <html lang="en" suppressHydrationWarning>
       <body
-        className="antialiased min-h-full flex flex-col bg-white text-gray-900 font-sans"
+        className={`${montserrat.variable} ${playfair.variable} font-sans antialiased bg-white text-slate-900`}
+        suppressHydrationWarning
       >
         <Navbar />
-        <main className="flex-grow">
-          {children}
-        </main>
-        <Footer />
+        {children}
+        <FooterWrapper />
       </body>
     </html>
   );

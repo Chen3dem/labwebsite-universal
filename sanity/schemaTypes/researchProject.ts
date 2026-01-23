@@ -6,6 +6,12 @@ export const researchProject = defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'order',
+      title: 'Order',
+      type: 'number',
+      hidden: false,
+    }),
+    defineField({
       name: 'title',
       title: 'Title',
       type: 'string',
@@ -35,6 +41,19 @@ export const researchProject = defineType({
       options: {
         hotspot: true,
       },
+    }),
+    defineField({
+      name: 'imageFit',
+      title: 'Image Display Style',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Show Full Image (Contain)', value: 'contain' },
+          { title: 'Fill Area (Cover)', value: 'cover' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'cover',
     }),
     defineField({
       name: 'description',

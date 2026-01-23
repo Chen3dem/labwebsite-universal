@@ -1,20 +1,62 @@
 @import "tailwindcss";
 
 @theme {
-  --color-cu-gold: #CFB87C;
-  --color-cu-black: #000000;
-  --color-cu-gray: #4B5563;
+  /* BARRETT LAB THEME (Light/Modern/Serif) */
+  --color-background: #ffffff;
+  --color-foreground: #0f172a;
+  /* Slate 900 */
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-merriweather), ui-serif, Georgia, serif;
+  /* Dark Blue Theme */
+  --color-primary: #1e3a8a;
+  /* Blue 900 */
+  --color-primary-dark: #172554;
+  /* Blue 950 */
+  --color-primary-light: #3b82f6;
+  /* Blue 500 */
+
+  --color-secondary: #bae6fd;
+  /* Sky 200 */
+  --color-accent: #ddd6fe;
+  /* Violet 200 */
+
+  --color-surface: #f1f5f9;
+  /* Slate 100 */
+
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-playfair), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #111827;
+  --color-background: #ffffff;
+  --color-foreground: #0f172a;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom scrollbar (Light Theme) */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #fb7185;
+}
+
+/* Utility for alternating sections */
+.bg-snow {
+  background-color: #f1f5f9;
 }

@@ -82,3 +82,530 @@ Error fetching news: Error: Dataset not found - Dataset "production" not found f
  GET /contact 404 in 35ms (compile: 4ms, render: 31ms)
  GET /research 404 in 27ms (compile: 5ms, render: 22ms)
  GET /research 404 in 28ms (compile: 3ms, render: 25ms)
+ GET /research 404 in 60ms (compile: 14ms, render: 46ms)
+ GET /publications 404 in 22ms (compile: 5ms, render: 18ms)
+ GET /publications 404 in 35ms (compile: 4ms, render: 30ms)
+ GET /research 404 in 19ms (compile: 4ms, render: 15ms)
+ GET /research 404 in 31ms (compile: 2ms, render: 29ms)
+ GET /team 404 in 23ms (compile: 5ms, render: 18ms)
+ GET /team 404 in 41ms (compile: 4ms, render: 37ms)
+ GET /news 404 in 23ms (compile: 4ms, render: 19ms)
+ GET /news 404 in 28ms (compile: 3ms, render: 25ms)
+ GET /contact 404 in 23ms (compile: 4ms, render: 18ms)
+ GET /contact 404 in 39ms (compile: 6ms, render: 33ms)
+ GET /publications 404 in 17ms (compile: 3ms, render: 14ms)
+ GET /publications 404 in 35ms (compile: 3ms, render: 32ms)
+ GET /research 404 in 19ms (compile: 4ms, render: 15ms)
+ GET /research 404 in 32ms (compile: 3ms, render: 30ms)
+ GET /research 404 in 14ms (compile: 4ms, render: 11ms)
+ GET /research 404 in 26ms (compile: 1530µs, render: 25ms)
+ GET /publications 404 in 18ms (compile: 4ms, render: 14ms)
+ GET /publications 404 in 35ms (compile: 3ms, render: 33ms)
+ GET /research 404 in 23ms (compile: 5ms, render: 18ms)
+ GET /research 404 in 36ms (compile: 4ms, render: 32ms)
+ GET /team 404 in 19ms (compile: 4ms, render: 15ms)
+ GET /team 404 in 35ms (compile: 3ms, render: 33ms)
+ GET /news 404 in 20ms (compile: 3ms, render: 17ms)
+ GET /news 404 in 36ms (compile: 4ms, render: 32ms)
+ GET /contact 404 in 21ms (compile: 5ms, render: 16ms)
+ GET /contact 404 in 38ms (compile: 3ms, render: 35ms)
+ GET /research 404 in 18ms (compile: 3ms, render: 15ms)
+ GET /research 404 in 37ms (compile: 3ms, render: 34ms)
+Error fetching news: Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "error": "Dataset not found",\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\"",\n' +
+    '  "statusCode": 404\n' +
+    '}',
+  details: undefined
+}
+ GET / 200 in 238ms (compile: 9ms, render: 229ms)
+ GET /research 404 in 22ms (compile: 5ms, render: 17ms)
+ GET /research 404 in 39ms (compile: 2ms, render: 37ms)
+Error fetching news: Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\"",\n' +
+    '  "statusCode": 404,\n' +
+    '  "error": "Dataset not found"\n' +
+    '}',
+  details: undefined
+}
+ GET / 200 in 91ms (compile: 2ms, render: 88ms)
+Error fetching news: Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\"",\n' +
+    '  "statusCode": 404,\n' +
+    '  "error": "Dataset not found"\n' +
+    '}',
+  details: undefined
+}
+ GET / 200 in 119ms (compile: 11ms, render: 108ms)
+Error fetching news: Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "statusCode": 404,\n' +
+    '  "error": "Dataset not found",\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\""\n' +
+    '}',
+  details: undefined
+}
+ GET / 200 in 74ms (compile: 2ms, render: 72ms)
+✓ Compiled in 90ms
+✓ Compiled in 26ms
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\"",\n' +
+    '  "statusCode": 404,\n' +
+    '  "error": "Dataset not found"\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+ GET / 200 in 229ms (compile: 54ms, render: 176ms)
+✓ Compiled in 119ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\"",\n' +
+    '  "statusCode": 404,\n' +
+    '  "error": "Dataset not found"\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "error": "Dataset not found",\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\"",\n' +
+    '  "statusCode": 404\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "statusCode": 404,\n' +
+    '  "error": "Dataset not found",\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\""\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\"",\n' +
+    '  "statusCode": 404,\n' +
+    '  "error": "Dataset not found"\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\"",\n' +
+    '  "statusCode": 404,\n' +
+    '  "error": "Dataset not found"\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+ GET / 200 in 281ms (compile: 75ms, render: 205ms)
+ GET / 200 in 137ms (compile: 1318µs, render: 135ms)
+ GET / 200 in 126ms (compile: 1205µs, render: 125ms)
+ GET / 200 in 114ms (compile: 819µs, render: 113ms)
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "statusCode": 404,\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\"",\n' +
+    '  "error": "Dataset not found"\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+ GET / 200 in 140ms (compile: 867µs, render: 139ms)
+ GET / 200 in 36ms (compile: 1322µs, render: 35ms)
+ GET / 500 in 352ms (compile: 118ms, render: 234ms)
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+✓ Compiled in 39ms
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\"",\n' +
+    '  "statusCode": 404,\n' +
+    '  "error": "Dataset not found"\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+ GET / 500 in 60ms (compile: 1136µs, render: 58ms)
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "statusCode": 404,\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\"",\n' +
+    '  "error": "Dataset not found"\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+✓ Compiled in 0ms
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\"",\n' +
+    '  "error": "Dataset not found",\n' +
+    '  "statusCode": 404\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\"",\n' +
+    '  "error": "Dataset not found",\n' +
+    '  "statusCode": 404\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "error": "Dataset not found",\n' +
+    '  "statusCode": 404,\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\""\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\"",\n' +
+    '  "statusCode": 404,\n' +
+    '  "error": "Dataset not found"\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\"",\n' +
+    '  "statusCode": 404,\n' +
+    '  "error": "Dataset not found"\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+ GET / 200 in 239ms (compile: 52ms, render: 187ms)
+ GET / 200 in 132ms (compile: 1358µs, render: 130ms)
+ GET / 200 in 122ms (compile: 680µs, render: 121ms)
+ GET / 200 in 114ms (compile: 604µs, render: 113ms)
+ GET / 200 in 104ms (compile: 1360µs, render: 103ms)
+ GET / 200 in 8ms (compile: 746µs, render: 7ms)
+ GET / 500 in 254ms (compile: 71ms, render: 182ms)
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "statusCode": 404,\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\"",\n' +
+    '  "error": "Dataset not found"\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+ GET / 500 in 66ms (compile: 1083µs, render: 65ms)
+✓ Compiled in 39ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\"",\n' +
+    '  "statusCode": 404,\n' +
+    '  "error": "Dataset not found"\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+✓ Compiled in 0ms
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "statusCode": 404,\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\"",\n' +
+    '  "error": "Dataset not found"\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "statusCode": 404,\n' +
+    '  "error": "Dataset not found",\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\""\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "statusCode": 404,\n' +
+    '  "error": "Dataset not found",\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\""\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "statusCode": 404,\n' +
+    '  "error": "Dataset not found",\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\""\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "statusCode": 404,\n' +
+    '  "error": "Dataset not found",\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\""\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+ GET / 200 in 254ms (compile: 64ms, render: 191ms)
+ GET / 200 in 122ms (compile: 637µs, render: 121ms)
+ GET / 200 in 132ms (compile: 1169µs, render: 131ms)
+ GET / 200 in 114ms (compile: 505µs, render: 114ms)
+ GET / 200 in 104ms (compile: 658µs, render: 104ms)
+ GET / 200 in 23ms (compile: 3ms, render: 21ms)
+ GET / 500 in 285ms (compile: 82ms, render: 203ms)
+✓ Compiled in 64ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "error": "Dataset not found",\n' +
+    '  "statusCode": 404,\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\""\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\"",\n' +
+    '  "error": "Dataset not found",\n' +
+    '  "statusCode": 404\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+ GET / 200 in 194ms (compile: 121ms, render: 73ms)
+ GET / 200 in 9ms (compile: 779µs, render: 8ms)
+ GET / 500 in 162ms (compile: 71ms, render: 92ms)
+✓ Compiled in 110ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\"",\n' +
+    '  "error": "Dataset not found",\n' +
+    '  "statusCode": 404\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "statusCode": 404,\n' +
+    '  "error": "Dataset not found",\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\""\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\"",\n' +
+    '  "statusCode": 404,\n' +
+    '  "error": "Dataset not found"\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "statusCode": 404,\n' +
+    '  "error": "Dataset not found",\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\""\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "statusCode": 404,\n' +
+    '  "error": "Dataset not found",\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\""\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+⨯ Error: Dataset not found - Dataset "production" not found for project ID "your-project-id"
+    at ignore-listed frames {
+  response: [Object],
+  statusCode: 404,
+  responseBody: '{\n' +
+    '  "error": "Dataset not found",\n' +
+    '  "statusCode": 404,\n' +
+    '  "message": "Dataset \\"production\\" not found for project ID \\"your-project-id\\""\n' +
+    '}',
+  details: undefined,
+  digest: '3390386547'
+}
+ GET / 200 in 276ms (compile: 82ms, render: 195ms)
+ GET / 200 in 141ms (compile: 884µs, render: 140ms)
+ GET / 200 in 127ms (compile: 1859µs, render: 125ms)
+ GET / 200 in 108ms (compile: 948µs, render: 107ms)
+ GET / 200 in 97ms (compile: 950µs, render: 96ms)
+ GET / 200 in 12ms (compile: 768µs, render: 11ms)
+ GET / 500 in 292ms (compile: 99ms, render: 193ms)
+Fetching mock data for query: *[_type == "researchProject" && featured == true] | order(startDate desc)[0...3] {
+  _id,
+  title,
+  "slug": slug.current,
+  summary,
+  "mainImage": mainImage.asset->url
+}
+Fetching mock data for query: *[_type == "newsPost"] | order(publishedAt desc)[0...3] {
+  _id,
+  title,
+  "slug": slug.current,
+  publishedAt,
+  excerpt
+}
+ GET / 200 in 156ms (compile: 73ms, render: 83ms)
+Fetching mock data for query: *[_type == "researchProject" && featured == true] | order(startDate desc)[0...3] {
+  _id,
+  title,
+  "slug": slug.current,
+  summary,
+  "mainImage": mainImage.asset->url
+}
+Fetching mock data for query: *[_type == "newsPost"] | order(publishedAt desc)[0...3] {
+  _id,
+  title,
+  "slug": slug.current,
+  publishedAt,
+  excerpt
+}
+ GET / 200 in 74ms (compile: 57ms, render: 17ms)
+Fetching mock data for query
+Fetching mock data for query
+ GET / 200 in 58ms (compile: 42ms, render: 16ms)
+Fetching mock data for query
+Fetching mock data for query
+ GET / 200 in 106ms (compile: 17ms, render: 89ms)
+Fetching mock data for query
+ GET /research 200 in 186ms (compile: 173ms, render: 12ms)
+Fetching mock data for query
+ GET /research 200 in 25ms (compile: 4ms, render: 22ms)
+Fetching mock data for query
+ GET /publications 200 in 106ms (compile: 99ms, render: 7ms)
+Fetching mock data for query
+ GET /team 200 in 107ms (compile: 99ms, render: 7ms)
+Fetching mock data for query
+ GET /news 200 in 192ms (compile: 184ms, render: 8ms)
+ GET /contact 200 in 70ms (compile: 59ms, render: 11ms)
+Fetching mock data for query
+ GET /research 200 in 26ms (compile: 3ms, render: 23ms)
+[?25h

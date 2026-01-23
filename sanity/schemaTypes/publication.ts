@@ -12,6 +12,38 @@ export const publication = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'doi',
+      title: 'DOI',
+      type: 'string',
+      description: 'Digital Object Identifier (e.g. 10.1038/...)',
+    }),
+    defineField({
+      name: 'publishedAt',
+      title: 'Published At',
+      type: 'datetime',
+    }),
+    defineField({
+      name: 'image',
+      title: 'Publication Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
+      name: 'imageFit',
+      title: 'Image Display Style',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Show Full Image (Contain)', value: 'contain' },
+          { title: 'Fill Area (Cover)', value: 'cover' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'cover',
+    }),
+    defineField({
       name: 'authors',
       title: 'Authors',
       type: 'string',
@@ -31,9 +63,15 @@ export const publication = defineType({
       validation: (Rule) => Rule.required().min(1900).max(new Date().getFullYear()),
     }),
     defineField({
-      name: 'link',
-      title: 'Article Link (URL)',
+      name: 'url',
+      title: 'Article URL',
       type: 'url',
+    }),
+    defineField({
+      name: 'link',
+      title: 'Article Link (Legacy)',
+      type: 'url',
+      hidden: true,
     }),
     defineField({
       name: 'category',

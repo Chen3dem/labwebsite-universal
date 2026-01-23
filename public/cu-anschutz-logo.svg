@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 100" fill="none">
+  <!-- Corrected CU Logo Icon -->
+  <!-- Source: Reconstructed from verified vector geometry -->
+  <g transform="translate(0, 5) scale(0.25)">
+    <!-- Gold C part -->
+    <path fill="#CFB87C" d="M126.8,47h56.6c4.2,0,7.6,3.4,7.6,7.6v58.8c0,4.2-3.4,7.6-7.6,7.6h-56.6c-4.2,0-7.6-3.4-7.6-7.6V54.6C119.2,50.3,122.6,47,126.8,47z"/>
+    <!-- Black Background Block inside C -->
+    <rect x="111" y="47" width="80" height="80" fill="black" rx="8" ry="8" />
+    <!-- Gold U inner -->
+    <path fill="#CFB87C" d="M141.6,63.1h35.8v41h-35.8V63.1z"/>
+    
+    <!-- Large Gold Outer C -->
+    <path fill="#CFB87C" d="M29.5,0h86C131.8,0,145,13.2,145,29.5v22.8H119V29.5c0-2-1.6-3.6-3.6-3.6H29.5c-2,0-3.6,1.6-3.6,3.6v105.8c0,2,1.6,3.6,3.6,3.6h86c2,0,3.6-1.6,3.6-3.6v-14h26v16.8c0,16.3-13.2,29.5-29.5,29.5h-86C13.2,167.5,0,154.3,0,138V29.5C0,13.2,13.2,0,29.5,0z"/>
+    
+    <!-- Black Inner C cutout -->
+    <path fill="#000000" d="M29.5,9C18.2,9,9,18.2,9,29.5v108.5C9,149.3,18.2,158.5,29.5,158.5h86c11.3,0,20.5-9.2,20.5-20.5v-16.8h-8v14c0,6.9-5.6,12.6-12.6,12.6h-86c-6.9,0-12.6-5.6-12.6-12.6V29.5c0-6.9,5.6-12.6,12.6-12.6h86c6.9,0,12.6,5.6,12.6,12.6V54h8V29.5c0-11.3-9.2-20.5-20.5-20.5H29.5z"/>
+
+    <!-- Fix for interlocking U (Black Block) -->
+    <path fill="#000000" d="M111.4,45.8 h74.2 c8.5,0, 15.4,6.9, 15.4,15.4 v64.4 c0,8.5-6.9,15.4-15.4,15.4 h-74.2 c-8.5,0-15.4-6.9-15.4-15.4 V61.2 C96,52.7, 102.9,45.8, 111.4,45.8 z M126, 126 h45 V 60 h-45 V 126 z" fill-rule="evenodd"/>
+  </g>
+  
+  <!-- "Anschutz" Text -->
+  <text x="60" y="45" font-family="Arial, sans-serif" font-size="42" fill="#000000" letter-spacing="-1">Anschutz</text>
+  
+  <!-- Divider Line -->
+  <line x1="60" y1="60" x2="335" y2="60" stroke="#000000" stroke-width="1.5" />
+  
+  <!-- "School of Medicine" Text -->
+  <text x="60" y="88" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#000000">School of Medicine</text>
+</svg>

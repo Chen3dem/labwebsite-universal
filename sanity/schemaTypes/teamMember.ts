@@ -19,6 +19,7 @@ export const teamMember = defineType({
         list: [
           { title: 'Principal Investigator', value: 'pi' },
           { title: 'Postdoctoral Fellow', value: 'postdoc' },
+          { title: 'Professional Research Assistant', value: 'pra' },
           { title: 'PhD Student', value: 'phd' },
           { title: 'Master Student', value: 'master' },
           { title: 'Undergraduate', value: 'undergrad' },
@@ -29,9 +30,9 @@ export const teamMember = defineType({
     }),
     defineField({
       name: 'bio',
-      title: 'Bio',
+      title: 'About Me',
       type: 'text',
-      rows: 5,
+      rows: 4,
     }),
     defineField({
       name: 'headshot',
@@ -40,6 +41,19 @@ export const teamMember = defineType({
       options: {
         hotspot: true,
       },
+    }),
+    defineField({
+      name: 'imageFit',
+      title: 'Image Display Style',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Show Full Image (Contain)', value: 'contain' },
+          { title: 'Fill Area (Cover)', value: 'cover' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'cover',
     }),
     defineField({
       name: 'email',

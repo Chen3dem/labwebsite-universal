@@ -19,10 +19,49 @@ export const newsPost = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'body',
-      title: 'Body',
-      type: 'array',
-      of: [{ type: 'block' }],
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'title',
+        maxLength: 96,
+      },
+      validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      name: 'excerpt',
+      title: 'Excerpt',
+      type: 'text',
+      rows: 3,
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'mainImage',
+      title: 'Main Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
+      name: 'imageFit',
+      title: 'Image Display Style',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Show Full Image (Contain)', value: 'contain' },
+          { title: 'Fill Area (Cover)', value: 'cover' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'cover',
+    }),
+    defineField({
+      name: 'url',
+      title: 'External Link',
+      type: 'url',
+      description: 'Optional URL to link this news entry to (e.g. a publication or full article).',
+    }),
+
   ],
 });
