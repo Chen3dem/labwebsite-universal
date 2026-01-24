@@ -28,5 +28,3 @@ The lab investigates mechanisms of lysosomal signaling and cellular dormancy.
 - `sanity/`: Sanity configuration and mock data (`sanity/lib/mockData.ts`).
 - `public/`: Static assets.
 
-## Aesthetic
-The website follows a "Dark Mode" aesthetic (Charcoal/Teal) inspired by the *Dormant Biology Lab*.
