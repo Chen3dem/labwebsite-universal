@@ -159,7 +159,48 @@ Once you are happy with the changes Antigravity has made locally:
 
 ---
 
-## 8. Local Development (For Developers)
+## 8. Advanced Features: Inventory & NFC
+The website includes an Inventory System and NFC Tag support for managing lab assets.
+
+### Inventory System
+Accessible at `/inventory`, this system tracks lab equipment and supplies.
+
+#### Managing Items
+1.  **Go to Sanity Studio** -> **Inventory Items**.
+2.  **Add Item**: Enter Name, Category (Equipment/Reagent/Supply), Stock Level, Location, etc.
+3.  **Status**:
+    *   **In Stock**: Available for use.
+    *   **Low Stock**: marked yellow.
+    *   **Out of Stock**: marked red.
+4.  **Reordering**: Users can click "Reorder" on an item. This opens an email pre-filled with the item details, addressed to the lab manager (configured in Site Settings).
+
+### NFC Tag System
+You can place physical NFC tags in the lab. Scanning them with a phone opens specific pages.
+
+#### 1. Configure a Tag in Sanity
+1.  **Go to Sanity Studio** -> **NFC Tags**.
+2.  **Create Tag**: Enter a unique `Tag ID` (e.g., `freezer-1` or `microscope-a`).
+3.  **Select Action Type**:
+    *   **Location**: Shows all inventory items at that location.
+    *   **Equipment**: Opens the specific detail page for an inventory item.
+    *   **Protocol**: Opens a specific protocol.
+    *   **Receiving**: Opens the "Receiving Mode" to scan items in.
+
+#### 2. Program the Physical Tag
+You need an NFC writer app on your phone (e.g., "NFC Tools").
+1.  **Open App** -> Write -> Add Record -> URL.
+2.  **URL Format**: `https://your-lab.vercel.app/nfc/[Tag-ID]`
+    *   Example: `https://mylab.com/nfc/freezer-1`
+3.  **Write**: Hold phone to tag to write.
+
+#### 3. Scanning
+*   **iOS**: Tap the top back of the phone to the tag.
+*   **Android**: Unlock phone and tap.
+*   The phone will open the URL, which automatically redirects to the correct page based on your Sanity configuration.
+
+---
+
+## 9. Local Development (For Developers)
 If you want to run the code on your own machine:
 
 1.  **Install Dependencies**:
