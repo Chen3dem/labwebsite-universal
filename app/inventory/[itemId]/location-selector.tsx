@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { updateItemLocation } from "../../actions";
 import { Check, MapPin, Plus } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
@@ -13,13 +14,19 @@ interface LocationSelectorProps {
 }
 
 export function LocationSelector({ itemId, currentLocation, allLocations }: LocationSelectorProps) {
+    const router = useRouter();
     const [open, setOpen] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const [location, setLocation] = useState(currentLocation);
 
-    // Sync with props when they change
+    // Track if user just made a selection (prevents prop sync from reverting)
+    const userSelectedRef = useRef(false);
+
+    // Sync with props only when NOT recently selected by user
     useEffect(() => {
-        setLocation(currentLocation);
+        if (!userSelectedRef.current) {
+            setLocation(currentLocation);
+        }
     }, [currentLocation]);
 
     const handleSelect = (loc: string) => {
@@ -29,16 +36,23 @@ export function LocationSelector({ itemId, currentLocation, allLocations }: Loca
         setLocation(loc);
         setInputValue("");
 
+        // Mark as user-selected to prevent prop sync from reverting
+        userSelectedRef.current = true;
+
         // Fire-and-forget with toast
         const toastId = showToast(`Setting location to ${loc}...`, "loading");
 
         updateItemLocation(itemId, loc)
             .then(() => {
                 updateToast(toastId, `✓ Location: ${loc}`, "success");
+                // Now allow prop sync again after server confirms
+                userSelectedRef.current = false;
+                router.refresh();
             })
             .catch((err) => {
                 console.error(err);
                 updateToast(toastId, "Failed to update location", "error");
+                userSelectedRef.current = false;
                 setLocation(currentLocation); // Revert on error
             });
     };

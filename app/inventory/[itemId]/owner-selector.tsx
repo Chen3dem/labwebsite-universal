@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { updateItemOwner } from "../../actions";
 import { Check, ChevronDown, User, Users } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
@@ -20,12 +21,18 @@ interface OwnerSelectorProps {
 }
 
 export function OwnerSelector({ itemId, currentOwner, allMembers }: OwnerSelectorProps) {
+    const router = useRouter();
     const [open, setOpen] = useState(false);
     const [ownerId, setOwnerId] = useState(currentOwner?._id || 'lab-stock-placeholder');
 
-    // Sync with props when they change
+    // Track if user just made a selection (prevents prop sync from reverting)
+    const userSelectedRef = useRef(false);
+
+    // Sync with props only when NOT recently selected by user
     useEffect(() => {
-        setOwnerId(currentOwner?._id || 'lab-stock-placeholder');
+        if (!userSelectedRef.current) {
+            setOwnerId(currentOwner?._id || 'lab-stock-placeholder');
+        }
     }, [currentOwner]);
 
     // Derive display owner from ID
@@ -45,16 +52,23 @@ export function OwnerSelector({ itemId, currentOwner, allMembers }: OwnerSelecto
         const newId = memberId === 'lab-stock' ? 'lab-stock-placeholder' : memberId;
         setOwnerId(newId);
 
+        // Mark as user-selected to prevent prop sync from reverting
+        userSelectedRef.current = true;
+
         const ownerName = memberId === 'lab-stock' ? 'Lab Stock' : allMembers.find(m => m._id === memberId)?.name || 'Unknown';
         const toastId = showToast(`Setting owner to ${ownerName}...`, "loading");
 
         updateItemOwner(itemId, memberId)
             .then(() => {
                 updateToast(toastId, `✓ Owner: ${ownerName}`, "success");
+                // Now allow prop sync again after server confirms
+                userSelectedRef.current = false;
+                router.refresh();
             })
             .catch((err) => {
                 console.error(err);
                 updateToast(toastId, "Failed to update owner", "error");
+                userSelectedRef.current = false;
                 setOwnerId(currentOwner?._id || 'lab-stock-placeholder'); // Revert
             });
     };
