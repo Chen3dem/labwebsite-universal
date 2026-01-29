@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { urlFor } from '@/sanity/lib/image';
 
 interface HeroSliderProps {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     images: any[]; // Sanity image objects
     fit?: 'contain' | 'cover';
 }

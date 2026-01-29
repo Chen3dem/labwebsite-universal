@@ -1,3 +1,4 @@
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Montserrat, Playfair_Display } from "next/font/google"; // Playfair Display is serif.
 import Navbar from "@/components/Navbar";
@@ -25,15 +26,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${montserrat.variable} ${playfair.variable} font-sans antialiased bg-white text-slate-900`}
-        suppressHydrationWarning
-      >
-        <Navbar />
-        {children}
-        <FooterWrapper />
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={`${montserrat.variable} ${playfair.variable} font-sans antialiased bg-white text-slate-900`}
+          suppressHydrationWarning
+        >
+          <Navbar />
+          {children}
+          <FooterWrapper />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

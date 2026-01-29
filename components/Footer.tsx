@@ -13,9 +13,10 @@ export default function Footer() {
           <QuoteOfTheDay />
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between gap-12 lg:gap-24 text-sm max-w-7xl mx-auto">
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-4 lg:gap-12 text-sm max-w-7xl mx-auto">
           {/* Column 1: Logo & Address */}
-          <div className="space-y-3 max-w-sm">
+          <div className="col-span-3 md:col-span-3 space-y-3 max-w-md relative">
+            {/* Gradient decorative blob for mobile only, maybe too much? leaving it out for now to keep it clean */}
             <Link href="/" className="inline-block group">
               <div className="flex items-center gap-3">
                 {/* Lab Logo - Round Mask */}
@@ -63,6 +64,7 @@ export default function Footer() {
               <li><Link href="/team" className="text-slate-400 hover:text-primary transition-colors hover:translate-x-1 inline-block duration-200">Team</Link></li>
               <li><Link href="/publications" className="text-slate-400 hover:text-primary transition-colors hover:translate-x-1 inline-block duration-200">Publications</Link></li>
               <li><Link href="/news" className="text-slate-400 hover:text-primary transition-colors hover:translate-x-1 inline-block duration-200">News & Fun</Link></li>
+              <li><Link href="/intranet" className="text-slate-400 hover:text-primary transition-colors hover:translate-x-1 inline-block duration-200">Intranet</Link></li>
             </ul>
           </div>
 

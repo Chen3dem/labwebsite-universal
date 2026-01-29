@@ -6,19 +6,33 @@ import { urlFor } from "@/sanity/lib/image";
 
 export const revalidate = 60;
 
-export default async function NewsPage(props: { searchParams: Promise<{ page?: string }> }) {
+export default async function NewsPage(props: { searchParams: Promise<{ page?: string; funPage?: string }> }) {
     const searchParams = await props.searchParams;
     const allNews = await sanityFetch({ query: ALL_NEWS_QUERY });
     const galleryImages = await sanityFetch({ query: GALLERY_IMAGES_QUERY });
 
-    const ITEMS_PER_PAGE = 6;
-    const currentPage = Number(searchParams?.page) || 1;
-    const totalPages = Math.ceil(allNews.length / ITEMS_PER_PAGE);
+    // News Pagination
+    const NEWS_ITEMS_PER_PAGE = 6;
+    const currentNewsPage = Number(searchParams?.page) || 1;
+    const totalNewsPages = Math.ceil(allNews.length / NEWS_ITEMS_PER_PAGE);
+    const startNewsIndex = (currentNewsPage - 1) * NEWS_ITEMS_PER_PAGE;
+    const currentNews = allNews.slice(startNewsIndex, startNewsIndex + NEWS_ITEMS_PER_PAGE);
 
-    // Calculate start and end index
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
-    const currentNews = allNews.slice(startIndex, endIndex);
+    // Fun Pagination
+    const FUN_ITEMS_PER_PAGE = 4;
+    const currentFunPage = Number(searchParams?.funPage) || 1;
+    const totalFunPages = Math.ceil(galleryImages.length / FUN_ITEMS_PER_PAGE);
+    const startFunIndex = (currentFunPage - 1) * FUN_ITEMS_PER_PAGE;
+    const currentFunImages = galleryImages.slice(startFunIndex, startFunIndex + FUN_ITEMS_PER_PAGE);
+
+    // Helper to generate links preserving state
+    const getLink = (targetNewsPage: number, targetFunPage: number) => {
+        const params = new URLSearchParams();
+        if (targetNewsPage > 1) params.set('page', targetNewsPage.toString());
+        if (targetFunPage > 1) params.set('funPage', targetFunPage.toString());
+        const str = params.toString();
+        return str ? `/news?${str}` : '/news';
+    };
 
     return (
         <div className="bg-white min-h-screen pt-32 pb-24 text-slate-900">
@@ -87,26 +101,28 @@ export default async function NewsPage(props: { searchParams: Promise<{ page?: s
                     )}
                 </div>
 
-                {/* Pagination Controls */}
-                {totalPages > 1 && (
+                {/* News Pagination Controls */}
+                {totalNewsPages > 1 && (
                     <div className="flex justify-center gap-4 mb-32">
-                        {currentPage > 1 && (
+                        {currentNewsPage > 1 && (
                             <Link
-                                href={`/news?page=${currentPage - 1}`}
+                                href={getLink(currentNewsPage - 1, currentFunPage)}
                                 className="px-6 py-2 border border-slate-300 rounded-full text-slate-600 hover:bg-slate-100 transition-colors bg-white font-medium"
+                                scroll={false}
                             >
                                 ← Newer
                             </Link>
                         )}
 
                         <span className="px-4 py-2 text-slate-400 font-medium">
-                            Page {currentPage} of {totalPages}
+                            Page {currentNewsPage} of {totalNewsPages}
                         </span>
 
-                        {currentPage < totalPages && (
+                        {currentNewsPage < totalNewsPages && (
                             <Link
-                                href={`/news?page=${currentPage + 1}`}
+                                href={getLink(currentNewsPage + 1, currentFunPage)}
                                 className="px-6 py-2 border border-slate-300 rounded-full text-slate-600 hover:bg-slate-100 transition-colors bg-white font-medium"
+                                scroll={false}
                             >
                                 Older →
                             </Link>
@@ -121,7 +137,7 @@ export default async function NewsPage(props: { searchParams: Promise<{ page?: s
                             <h2 className="text-5xl md:text-6xl font-display font-bold mb-6 text-slate-900">Fun</h2>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-                            {galleryImages.map((image: any) => {
+                            {currentFunImages.map((image: any) => {
                                 const GalleryItem = (
                                     <div className="group h-full">
                                         <div className="relative aspect-video w-full overflow-hidden rounded-lg shadow-md mb-4 bg-slate-50 border border-slate-100 group-hover:shadow-lg transition-all duration-300">
@@ -158,6 +174,35 @@ export default async function NewsPage(props: { searchParams: Promise<{ page?: s
                                 );
                             })}
                         </div>
+
+                        {/* Fun Pagination Controls */}
+                        {totalFunPages > 1 && (
+                            <div className="flex justify-center gap-4 mt-12">
+                                {currentFunPage > 1 && (
+                                    <Link
+                                        href={getLink(currentNewsPage, currentFunPage - 1)}
+                                        className="px-6 py-2 border border-slate-300 rounded-full text-slate-600 hover:bg-slate-100 transition-colors bg-white font-medium"
+                                        scroll={false}
+                                    >
+                                        ← Previous
+                                    </Link>
+                                )}
+
+                                <span className="px-4 py-2 text-slate-400 font-medium">
+                                    Page {currentFunPage} of {totalFunPages}
+                                </span>
+
+                                {currentFunPage < totalFunPages && (
+                                    <Link
+                                        href={getLink(currentNewsPage, currentFunPage + 1)}
+                                        className="px-6 py-2 border border-slate-300 rounded-full text-slate-600 hover:bg-slate-100 transition-colors bg-white font-medium"
+                                        scroll={false}
+                                    >
+                                        Next →
+                                    </Link>
+                                )}
+                            </div>
+                        )}
                     </div>
                 )}
 

@@ -5,6 +5,11 @@ import { teamMember } from './teamMember';
 import { newsPost } from './newsPost';
 import gallery from './gallery';
 import { homePage } from './homePage';
+import { inventoryItem } from './inventoryItem';
+import { nfcTag } from './nfcTag';
+import { protocol } from './protocol';
+
+import { dailyActivityLog } from './dailyActivityLog';
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   researchProject,
@@ -13,4 +18,8 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   newsPost,
   gallery,
   homePage,
+  inventoryItem,
+  nfcTag,
+  protocol,
+  dailyActivityLog,
 ];

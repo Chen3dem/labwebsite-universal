@@ -106,6 +106,7 @@ export default function QuoteOfTheDay() {
     useEffect(() => {
         // Use local quotes strictly to ensure quality (Scientists & Philosophers)
         const randomIndex = Math.floor(Math.random() * QUOTES.length);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         setQuote(QUOTES[randomIndex]);
     }, []);
 

@@ -26,6 +26,7 @@ export default async function ResearchPage() {
 
             {/* ZIG-ZAG CONTENT */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-0">
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {projects.map((project: any, index: number) => (
                     <div
                         key={project._id}

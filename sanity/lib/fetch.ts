@@ -12,6 +12,7 @@ import { MOCK_PROJECTS, MOCK_NEWS, MOCK_MEMBERS, MOCK_PUBLICATIONS } from "./moc
 
 const IS_MOCK = projectId === "your-project-id";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function sanityFetch({ query, params = {} }: { query: string; params?: any }) {
     if (IS_MOCK) {
 

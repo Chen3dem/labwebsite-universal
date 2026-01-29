@@ -30,6 +30,7 @@ export default async function TeamPage() {
     const members = await sanityFetch({ query: ALL_MEMBERS_QUERY });
 
     // Sort members by role priority
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const sortedMembers = members.sort((a: any, b: any) => {
         const roleA = Object.keys(ROLE_PRIORITY).find(r => a.role.toLowerCase().includes(r)) || 'alumni';
         const roleB = Object.keys(ROLE_PRIORITY).find(r => b.role.toLowerCase().includes(r)) || 'alumni';
@@ -51,6 +52,7 @@ export default async function TeamPage() {
                 {/* Unified Team Grid */}
                 <div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                         {sortedMembers.map((member: any) => {
                             // Map 'pi' to 'Principal Investigator' if needed, or use the role map
                             const displayRole = ROLE_TITLES[member.role] || member.role;

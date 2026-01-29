@@ -4,10 +4,9 @@ interface NewsCardProps {
     title: string;
     publishedAt: string;
     excerpt: string;
-    slug: string;
 }
 
-export default function NewsCard({ title, publishedAt, excerpt, slug }: NewsCardProps) {
+export default function NewsCard({ title, publishedAt, excerpt }: NewsCardProps) {
     return (
         <div className="border-l-4 border-primary pl-4 py-1">
             <div className="mb-1 text-sm text-slate-500">

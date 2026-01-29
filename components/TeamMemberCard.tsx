@@ -5,6 +5,7 @@ interface TeamMemberCardProps {
     name: string;
     role: string;
     bio?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     headshot?: any;
     fit?: 'contain' | 'cover';
 }
