@@ -11,6 +11,8 @@ For comprehensive instructions on how to setup, deploy, and maintain this websit
     *   `NEXT_PUBLIC_SANITY_DATASET`
     *   `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
     *   `CLERK_SECRET_KEY`
+    *   `EMAIL_USER` (for backup bot)
+    *   `EMAIL_PASS` (Google App Password for backup bot)
 4.  **Deploy**: Click Deploy.
 
 See **[USER_GUIDE.md](./USER_GUIDE.md)** sections 1 & 4 for full details including custom domains and Sanity configuration.
