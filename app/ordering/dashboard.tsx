@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ClipboardList, ShoppingCart, ArrowRight, ArrowLeft, Search, Camera, Loader2, AlertCircle, ChevronRight, LayoutDashboard, Wrench } from "lucide-react";
@@ -28,13 +28,38 @@ interface OrderingDashboardProps {
     pendingApprovals: PendingItem[];
 }
 
-export default function OrderingDashboard({ pendingOrders, pendingApprovals }: OrderingDashboardProps) {
+export default function OrderingDashboard({ pendingOrders: initialOrders, pendingApprovals: initialApprovals }: OrderingDashboardProps) {
     const router = useRouter();
-    const [isPending, startTransition] = useTransition();
     const [scanId, setScanId] = useState("");
     const [showScanner, setShowScanner] = useState(false);
     const [error, setError] = useState("");
     const [searchResults, setSearchResults] = useState<any[]>([]);
+    const [isSearching, setIsSearching] = useState(false);
+
+    // Local state for optimistic UI
+    const [approvals, setApprovals] = useState(initialApprovals);
+    const [orders, setOrders] = useState(initialOrders);
+
+    // Optimistically move item from approvals to orders
+    const handleOptimisticApprove = (itemId: string) => {
+        const item = approvals.find(a => a.itemId === itemId);
+        if (item) {
+            // Remove from approvals
+            setApprovals(prev => prev.filter(a => a.itemId !== itemId));
+            // Add to orders (at the beginning)
+            setOrders(prev => [item, ...prev]);
+        }
+    };
+
+    // Revert if approval fails
+    const handleApprovalRevert = (itemId: string) => {
+        const item = orders.find(o => o.itemId === itemId);
+        if (item) {
+            // Move back to approvals
+            setOrders(prev => prev.filter(o => o.itemId !== itemId));
+            setApprovals(prev => [item, ...prev]);
+        }
+    };
 
     const handleSearch = async (e?: React.FormEvent) => {
         if (e) e.preventDefault();
@@ -44,28 +69,26 @@ export default function OrderingDashboard({ pendingOrders, pendingApprovals }: O
 
         setError("");
         setSearchResults([]);
+        setIsSearching(true);
 
-        startTransition(async () => {
-            try {
-                // Sanitize input if needed, but searchInventoryItems handles raw query mostly.
-                // NOTE: sanitizeBarcode is internal to ReceivingPage, but basic trim is good.
+        try {
+            const items = await searchInventoryItems(query);
 
-                const items = await searchInventoryItems(query);
-
-                if (items.length === 1) {
-                    // Exact match -> Navigate
-                    router.push(`/inventory/${items[0].itemId}?backUrl=/ordering`);
-                } else if (items.length > 1) {
-                    // Multiple -> Show results
-                    setSearchResults(items);
-                } else {
-                    setError(`Item "${query}" not found.`);
-                }
-            } catch (err) {
-                console.error(err);
-                setError("Failed to search item.");
+            if (items.length === 1) {
+                // Exact match -> Navigate
+                router.push(`/inventory/${items[0].itemId}?backUrl=/ordering`);
+            } else if (items.length > 1) {
+                // Multiple -> Show results
+                setSearchResults(items);
+            } else {
+                setError(`Item "${query}" not found.`);
             }
-        });
+        } catch (err) {
+            console.error(err);
+            setError("Failed to search item.");
+        } finally {
+            setIsSearching(false);
+        }
     };
 
     return (
@@ -99,10 +122,9 @@ export default function OrderingDashboard({ pendingOrders, pendingApprovals }: O
                         // We can't call handleSearch immediately due to state update async, 
                         // but we can just call search directly or use useEffect.
                         // Simple way: wrap in timeout or separate function. 
-                        // Actually, let's just setScanId and let user click? 
-                        // Or better: trigger search.
-                        // Impl:
-                        startTransition(async () => {
+                        // Trigger search directly
+                        (async () => {
+                            setIsSearching(true);
                             try {
                                 const items = await searchInventoryItems(text);
                                 if (items.length === 1) {
@@ -115,8 +137,10 @@ export default function OrderingDashboard({ pendingOrders, pendingApprovals }: O
                                 }
                             } catch (err) {
                                 setError("Search failed.");
+                            } finally {
+                                setIsSearching(false);
                             }
-                        });
+                        })();
                     }}
                     onClose={() => setShowScanner(false)}
                 />
@@ -151,10 +175,10 @@ export default function OrderingDashboard({ pendingOrders, pendingApprovals }: O
                     </div>
                     <button
                         onClick={handleSearch}
-                        disabled={!scanId || isPending}
+                        disabled={!scanId || isSearching}
                         className="w-full bg-slate-800 text-white p-3 rounded-xl font-bold text-sm hover:bg-slate-900 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                     >
-                        {isPending ? <Loader2 className="animate-spin" size={18} /> : "Search Item"}
+                        {isSearching ? <Loader2 className="animate-spin" size={18} /> : "Search Item"}
                     </button>
 
                     {error && (
@@ -191,12 +215,12 @@ export default function OrderingDashboard({ pendingOrders, pendingApprovals }: O
                         </div>
                         <div>
                             <h2 className="font-bold text-lg leading-tight">Requests for Approval</h2>
-                            <p className="text-xs text-slate-500">{pendingApprovals.length} items needing review</p>
+                            <p className="text-xs text-slate-500">{approvals.length} items needing review</p>
                         </div>
                     </div>
-                    {pendingApprovals.length > 0 ? (
+                    {approvals.length > 0 ? (
                         <div className="flex flex-col gap-3">
-                            {pendingApprovals.map((item) => (
+                            {approvals.map((item) => (
                                 <div
                                     key={item.itemId}
                                     className="flex items-center justify-between p-3 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors group"
@@ -227,7 +251,11 @@ export default function OrderingDashboard({ pendingOrders, pendingApprovals }: O
                                         </div>
                                     </Link>
                                     <div className="pl-3">
-                                        <ApproveButton itemId={item.itemId} />
+                                        <ApproveButton
+                                            itemId={item.itemId}
+                                            onApprove={() => handleOptimisticApprove(item.itemId)}
+                                            onError={() => handleApprovalRevert(item.itemId)}
+                                        />
                                     </div>
                                 </div>
                             ))}
@@ -245,12 +273,12 @@ export default function OrderingDashboard({ pendingOrders, pendingApprovals }: O
                         </div>
                         <div>
                             <h2 className="font-bold text-lg leading-tight">Just Ordered</h2>
-                            <p className="text-xs text-slate-500">{pendingOrders.length} items ordered</p>
+                            <p className="text-xs text-slate-500">{orders.length} items ordered</p>
                         </div>
                     </div>
-                    {pendingOrders.length > 0 ? (
+                    {orders.length > 0 ? (
                         <div className="flex flex-col gap-3">
-                            {pendingOrders.map((item) => (
+                            {orders.map((item) => (
                                 <Link
                                     key={item.itemId}
                                     href={`/inventory/${item.itemId}?backUrl=/ordering`}

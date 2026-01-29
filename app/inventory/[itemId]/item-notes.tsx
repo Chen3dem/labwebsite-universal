@@ -1,9 +1,10 @@
 
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useRef } from "react";
 import { addInventoryNote } from "../../actions";
-import { Loader2, Plus, MessageSquare } from "lucide-react";
+import { Plus, MessageSquare } from "lucide-react";
+import { showToast, updateToast } from "@/components/Toast";
 
 interface Note {
     _key: string;
@@ -12,20 +13,49 @@ interface Note {
     author: string;
 }
 
-export function ItemNotes({ itemId, notes }: { itemId: string, notes: Note[] }) {
-    const [isPending, startTransition] = useTransition();
+export function ItemNotes({ itemId, notes: initialNotes }: { itemId: string, notes: Note[] }) {
     const [showForm, setShowForm] = useState(false);
     const [newNote, setNewNote] = useState("");
+    const [notes, setNotes] = useState(initialNotes || []);
+
+    // Track user edits to prevent prop sync from reverting
+    const userEditedRef = useRef(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!newNote.trim()) return;
 
-        startTransition(async () => {
-            await addInventoryNote(itemId, newNote);
-            setNewNote("");
-            setShowForm(false);
-        });
+        const noteContent = newNote.trim();
+
+        // Create optimistic note
+        const optimisticNote: Note = {
+            _key: `optimistic-${Date.now()}`,
+            content: noteContent,
+            timestamp: new Date().toISOString(),
+            author: "You"
+        };
+
+        // Update UI IMMEDIATELY
+        setNotes(prev => [...prev, optimisticNote]);
+        setNewNote("");
+        setShowForm(false);
+        userEditedRef.current = true;
+
+        const toastId = showToast("Saving note...", "loading");
+
+        addInventoryNote(itemId, noteContent)
+            .then(() => {
+                updateToast(toastId, "✓ Note saved!", "success");
+                // Allow prop sync after delay
+                setTimeout(() => { userEditedRef.current = false; }, 2000);
+            })
+            .catch((err) => {
+                console.error(err);
+                updateToast(toastId, "Failed to save note", "error");
+                // Revert optimistic update
+                setNotes(prev => prev.filter(n => n._key !== optimisticNote._key));
+                userEditedRef.current = false;
+            });
     };
 
     return (
@@ -63,10 +93,10 @@ export function ItemNotes({ itemId, notes }: { itemId: string, notes: Note[] }) 
                         </button>
                         <button
                             type="submit"
-                            disabled={isPending || !newNote.trim()}
+                            disabled={!newNote.trim()}
                             className="bg-blue-600 text-white text-xs font-bold px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center gap-2"
                         >
-                            {isPending ? <Loader2 size={14} className="animate-spin" /> : "Save Note"}
+                            Save Note
                         </button>
                     </div>
                 </form>
@@ -95,3 +125,4 @@ export function ItemNotes({ itemId, notes }: { itemId: string, notes: Note[] }) 
         </div>
     );
 }
+

@@ -5,23 +5,34 @@ import { approveItem } from "../actions";
 import { Check } from "lucide-react";
 import { showToast, updateToast } from "@/components/Toast";
 
-export function ApproveButton({ itemId }: { itemId: string }) {
+interface ApproveButtonProps {
+    itemId: string;
+    onApprove?: () => void;
+    onError?: () => void;
+}
+
+export function ApproveButton({ itemId, onApprove, onError }: ApproveButtonProps) {
     const router = useRouter();
 
     const handleApprove = (e: React.MouseEvent) => {
         e.preventDefault();
+
+        // Call optimistic callback IMMEDIATELY
+        onApprove?.();
 
         const toastId = showToast("Approving request...", "loading");
 
         approveItem(itemId)
             .then(() => {
                 updateToast(toastId, "✓ Request approved!", "success");
-                // Refresh server components to update the lists
+                // Refresh server components to sync
                 router.refresh();
             })
             .catch((err) => {
                 console.error("Failed to approve", err);
                 updateToast(toastId, "Failed to approve", "error");
+                // Call revert callback
+                onError?.();
             });
     };
 
