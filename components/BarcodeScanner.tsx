@@ -13,6 +13,30 @@ export function BarcodeScanner({ onResult, onClose }: BarcodeScannerProps) {
     const scannerRef = useRef<Html5Qrcode | null>(null);
     const [error, setError] = useState<string>("");
     const [detectedCodes, setDetectedCodes] = useState<string[]>([]);
+    const autoSelectTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+    // Auto-select if only one barcode detected after 1.5 seconds
+    useEffect(() => {
+        // Clear any existing timer
+        if (autoSelectTimerRef.current) {
+            clearTimeout(autoSelectTimerRef.current);
+        }
+
+        if (detectedCodes.length === 1) {
+            autoSelectTimerRef.current = setTimeout(() => {
+                // Still only one code? Auto-select it
+                if (detectedCodes.length === 1) {
+                    onResult(detectedCodes[0]);
+                }
+            }, 1500);
+        }
+
+        return () => {
+            if (autoSelectTimerRef.current) {
+                clearTimeout(autoSelectTimerRef.current);
+            }
+        };
+    }, [detectedCodes, onResult]);
 
     useEffect(() => {
         // Initialize scanner

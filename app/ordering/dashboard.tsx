@@ -8,6 +8,7 @@ import { UserButton } from "@clerk/nextjs";
 import { ApproveButton } from "../intranet/approval-button";
 import { BarcodeScanner } from "@/components/BarcodeScanner";
 import { searchInventoryItems } from "../actions";
+import { ToastContainer } from "@/components/Toast";
 
 interface PendingItem {
     name: string;
@@ -69,7 +70,7 @@ export default function OrderingDashboard({ pendingOrders, pendingApprovals }: O
 
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col pt-32">
-            {/* ... header ... */}
+            <ToastContainer />
             {/* ... header ... */}
             <header className="bg-white shadow-sm p-4 grid grid-cols-3 items-center sticky top-24 z-40 px-6 sm:px-12">
                 <div className="flex justify-start">

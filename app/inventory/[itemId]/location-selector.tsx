@@ -1,9 +1,10 @@
 "use client";
 
-import { useTransition, useState } from "react";
+import { useState, useEffect } from "react";
 import { updateItemLocation } from "../../actions";
-import { Check, ChevronDown, MapPin, Plus } from "lucide-react";
+import { Check, MapPin, Plus } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
+import { showToast, updateToast } from "@/components/Toast";
 
 interface LocationSelectorProps {
     itemId: string;
@@ -12,15 +13,34 @@ interface LocationSelectorProps {
 }
 
 export function LocationSelector({ itemId, currentLocation, allLocations }: LocationSelectorProps) {
-    const [isPending, startTransition] = useTransition();
     const [open, setOpen] = useState(false);
     const [inputValue, setInputValue] = useState("");
+    const [location, setLocation] = useState(currentLocation);
+
+    // Sync with props when they change
+    useEffect(() => {
+        setLocation(currentLocation);
+    }, [currentLocation]);
 
     const handleSelect = (loc: string) => {
         setOpen(false);
-        startTransition(async () => {
-            await updateItemLocation(itemId, loc);
-        });
+
+        // Update UI IMMEDIATELY
+        setLocation(loc);
+        setInputValue("");
+
+        // Fire-and-forget with toast
+        const toastId = showToast(`Setting location to ${loc}...`, "loading");
+
+        updateItemLocation(itemId, loc)
+            .then(() => {
+                updateToast(toastId, `✓ Location: ${loc}`, "success");
+            })
+            .catch((err) => {
+                console.error(err);
+                updateToast(toastId, "Failed to update location", "error");
+                setLocation(currentLocation); // Revert on error
+            });
     };
 
     const filteredLocations = allLocations.filter(loc =>
@@ -31,11 +51,10 @@ export function LocationSelector({ itemId, currentLocation, allLocations }: Loca
         <Popover.Root open={open} onOpenChange={setOpen}>
             <Popover.Trigger asChild>
                 <button
-                    disabled={isPending}
                     className="inline-flex items-center gap-2 bg-slate-100 text-slate-600 px-4 py-1.5 rounded-full text-sm font-medium hover:bg-slate-200 transition-colors"
                 >
                     <MapPin size={14} />
-                    <span>{currentLocation || "Set Location"}</span>
+                    <span>{location || "Set Location"}</span>
                 </button>
             </Popover.Trigger>
 
@@ -65,11 +84,11 @@ export function LocationSelector({ itemId, currentLocation, allLocations }: Loca
                             <button
                                 key={loc}
                                 onClick={() => handleSelect(loc)}
-                                className={`w-full flex items-center justify-between p-2 rounded-lg text-sm transition-colors ${loc === currentLocation ? 'bg-slate-100 text-slate-900 font-bold' : 'text-slate-600 hover:bg-slate-50'
+                                className={`w-full flex items-center justify-between p-2 rounded-lg text-sm transition-colors ${loc === location ? 'bg-slate-100 text-slate-900 font-bold' : 'text-slate-600 hover:bg-slate-50'
                                     }`}
                             >
                                 <span>{loc}</span>
-                                {loc === currentLocation && <Check size={14} />}
+                                {loc === location && <Check size={14} />}
                             </button>
                         ))}
 
@@ -82,3 +101,4 @@ export function LocationSelector({ itemId, currentLocation, allLocations }: Loca
         </Popover.Root>
     );
 }
+

@@ -9,6 +9,7 @@ import { LocationCombobox } from "./location-combobox";
 import { BarcodeScanner } from "@/components/BarcodeScanner";
 import imageCompression from 'browser-image-compression';
 import { useRef } from "react";
+import { ToastContainer, showToast, updateToast } from "@/components/Toast";
 
 export default function ReceivingPage() {
     const router = useRouter();
@@ -177,76 +178,98 @@ export default function ReceivingPage() {
     const handleConfirm = async () => {
         if (!foundItem) return;
 
-        startTransition(async () => {
-            try {
-                let imageBase64 = undefined;
-                if (imageFile) {
-                    imageBase64 = await convertToBase64(imageFile);
-                }
+        // Capture data before resetting
+        const itemName = foundItem.name;
+        const itemIdentifier = foundItem.itemId || foundItem.barcode;
+        const qty = quantityReceived;
+        let imageBase64: string | undefined = undefined;
+        if (imageFile) {
+            imageBase64 = await convertToBase64(imageFile);
+        }
 
-                await receiveItem(foundItem.itemId || foundItem.barcode, quantityReceived, imageBase64);
-                alert(`Successfully received ${quantityReceived} units of ${foundItem.name}.`);
+        // Reset UI IMMEDIATELY (optimistic)
+        setStep('scan');
+        setFoundItem(null);
+        setScanId("");
+        setQuantityReceived(1);
+        setImageFile(null);
+        setImagePreview("");
 
-                // Reset to scan mode instead of leaving
-                setStep('scan');
-                setFoundItem(null);
-                setScanId("");
-                setQuantityReceived(1);
-                setImageFile(null);
-                setImagePreview("");
-            } catch (err) {
+        // Scroll to top of page
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // Show toast and run in background
+        const toastId = showToast(`Receiving ${qty}x ${itemName}...`, "loading");
+
+        // Fire-and-forget (no await blocking UI)
+        receiveItem(itemIdentifier, qty, imageBase64)
+            .then(() => {
+                updateToast(toastId, `✓ Received ${qty}x ${itemName}`, "success");
+            })
+            .catch((err) => {
                 console.error(err);
-                setError("Failed to update inventory.");
-            }
-        });
+                updateToast(toastId, `Failed to receive ${itemName}`, "error");
+            });
     };
 
     const handleCreate = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!newItemName.trim()) return;
 
-        startTransition(async () => {
-            try {
-                let imageBase64 = undefined;
-                if (imageFile) {
-                    imageBase64 = await convertToBase64(imageFile);
-                }
+        // Capture data before resetting
+        const itemName = newItemName;
+        const qty = quantityReceived;
+        let imageBase64: string | undefined = undefined;
+        if (imageFile) {
+            imageBase64 = await convertToBase64(imageFile);
+        }
 
-                await createInventoryItem({
-                    name: newItemName,
-                    barcode: newItemBarcode.trim() || undefined,
-                    location: newItemLocation,
-                    stock: quantityReceived,
-                    ownerId: newItemOwner || undefined,
-                    minStock: newItemMinStock,
-                    category: newItemCategory,
-                    imageBase64,
-                    isPlasmid // Pass flag
-                });
-                alert(`Successfully created and received ${quantityReceived} units of ${newItemName}.`);
+        const createData = {
+            name: newItemName,
+            barcode: newItemBarcode.trim() || undefined,
+            location: newItemLocation,
+            stock: quantityReceived,
+            ownerId: newItemOwner || undefined,
+            minStock: newItemMinStock,
+            category: newItemCategory,
+            imageBase64,
+            isPlasmid
+        };
 
-                // Reset to scan mode instead of leaving
-                setStep('scan');
-                setNewItemName("");
-                setNewItemBarcode("");
-                setNewItemOwner("");
-                setNewItemLocation("");
-                setNewItemMinStock(5);
-                setNewItemCategory("General");
-                setScanId("");
-                setQuantityReceived(1);
-                setImageFile(null);
-                setImagePreview("");
-                setIsPlasmid(false);
-            } catch (err) {
+        // Reset UI IMMEDIATELY (optimistic)
+        setStep('scan');
+        setNewItemName("");
+        setNewItemBarcode("");
+        setNewItemOwner("");
+        setNewItemLocation("");
+        setNewItemMinStock(5);
+        setNewItemCategory("General");
+        setScanId("");
+        setQuantityReceived(1);
+        setImageFile(null);
+        setImagePreview("");
+        setIsPlasmid(false);
+
+        // Scroll to top of page
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // Show toast and run in background
+        const toastId = showToast(`Creating ${itemName}...`, "loading");
+
+        // Fire-and-forget (no await blocking UI)
+        createInventoryItem(createData)
+            .then(() => {
+                updateToast(toastId, `✓ Created ${qty}x ${itemName}`, "success");
+            })
+            .catch((err) => {
                 console.error(err);
-                setError("Failed to create item.");
-            }
-        });
+                updateToast(toastId, `Failed to create ${itemName}`, "error");
+            });
     };
 
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col pt-32">
+            <ToastContainer />
             {/* ... header ... */}
             <header className="bg-white shadow-sm p-4 flex justify-between items-center sticky top-24 z-40 px-6 sm:px-12">
                 {step === 'scan' ? (
@@ -324,7 +347,6 @@ export default function ReceivingPage() {
                                         }}
                                         placeholder="Scan or Type Name..."
                                         className="w-full p-4 pl-12 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none font-medium text-center"
-                                        autoFocus
                                     />
                                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
                                 </div>
@@ -582,7 +604,6 @@ export default function ReceivingPage() {
                                         placeholder="e.g. 50ml Falcon Tubes"
                                         className="w-full p-4 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none"
                                         required
-                                        autoFocus
                                     />
                                 </div>
 

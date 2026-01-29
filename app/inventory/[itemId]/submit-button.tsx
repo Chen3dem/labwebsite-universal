@@ -1,31 +1,46 @@
 "use client";
 
-import { useState, useTransition, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { reorderItem, requestRepair, updateEquipmentStatus } from "../../actions";
-import { Loader2, ShoppingCart, Check, Wrench, QrCode } from "lucide-react";
+import { ShoppingCart, Check, Wrench, QrCode } from "lucide-react";
 import { QRCodeModal } from "@/components/QRCodeModal";
+import { showToast, updateToast } from "@/components/Toast";
 
 export function EquipmentStatusSelector({ currentStatus, itemId }: { currentStatus: string, itemId: string }) {
+    const router = useRouter();
     const [status, setStatus] = useState(currentStatus || 'Working');
-    const [isPending, startTransition] = useTransition();
 
+    // Sync with props when they change
     useEffect(() => {
         setStatus(currentStatus || 'Working');
     }, [currentStatus]);
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newStatus = e.target.value;
+
+        // Update UI IMMEDIATELY
         setStatus(newStatus);
-        startTransition(async () => {
-            await updateEquipmentStatus(itemId, newStatus);
-        });
+
+        const toastId = showToast(`Updating status...`, "loading");
+
+        updateEquipmentStatus(itemId, newStatus)
+            .then(() => {
+                updateToast(toastId, `✓ Status: ${newStatus}`, "success");
+                // Refresh server components to show/hide Repair button
+                router.refresh();
+            })
+            .catch((err) => {
+                console.error(err);
+                updateToast(toastId, "Failed to update status", "error");
+                setStatus(currentStatus || 'Working'); // Revert
+            });
     };
 
     return (
         <select
             value={status}
             onChange={handleChange}
-            disabled={isPending}
             className={`w-full p-3 rounded-xl border-2 font-bold text-center outline-none cursor-pointer appearance-none
                 ${status === 'Broken' ? 'bg-red-50 border-red-100 text-red-600' :
                     status === 'Finicky' ? 'bg-amber-50 border-amber-100 text-amber-600' :
@@ -42,25 +57,29 @@ export function EquipmentStatusSelector({ currentStatus, itemId }: { currentStat
     );
 }
 
+
 export function ReorderButton({ currentStatus, itemId }: { currentStatus: string, itemId: string }) {
-    const [isPending, startTransition] = useTransition();
     const [status, setStatus] = useState(currentStatus);
 
+    // Sync with props when they change
     useEffect(() => {
         setStatus(currentStatus);
     }, [currentStatus]);
-
 
     const isOrdered = status === "Ordered";
     const isRequested = status === "Requested";
     const isUrgent = status === "Out of Stock" || status === "Low Stock";
 
     const handleReorder = () => {
-        startTransition(async () => {
-            try {
-                const result = await reorderItem(itemId);
+        // Update UI IMMEDIATELY
+        setStatus("Requested");
+
+        const toastId = showToast("Submitting request...", "loading");
+
+        reorderItem(itemId)
+            .then((result) => {
                 if (result.success) {
-                    setStatus("Requested");
+                    updateToast(toastId, "✓ Request submitted!", "success");
 
                     // Open Mailto Link
                     const subject = encodeURIComponent(`[Approval Needed] ${result.itemName} (Qty: ${result.requestedQuantity})`);
@@ -74,17 +93,18 @@ ${window.location.origin}/ordering
 `);
                     window.location.href = `mailto:cuilabmanager@gmail.com?subject=${subject}&body=${body}`;
                 }
-            } catch (err) {
+            })
+            .catch((err) => {
                 console.error("Failed to reorder", err);
-                alert("Failed to request item. Please try again.");
-            }
-        });
+                updateToast(toastId, "Failed to submit request", "error");
+                setStatus(currentStatus); // Revert
+            });
     };
 
     return (
         <button
             onClick={handleReorder}
-            disabled={isPending || isOrdered || isRequested} // Disable if already requested
+            disabled={isOrdered || isRequested}
             className={`w-full py-6 rounded-2xl font-bold text-xl flex items-center justify-center gap-3 shadow-lg transition-all active:scale-95 text-white
         ${isOrdered || isRequested
                     ? "bg-slate-300 cursor-not-allowed text-slate-500 shadow-none"
@@ -94,12 +114,7 @@ ${window.location.origin}/ordering
                 }
       `}
         >
-            {isPending ? (
-                <>
-                    <Loader2 className="animate-spin" />
-                    <span>Submitting Request...</span>
-                </>
-            ) : isOrdered ? (
+            {isOrdered ? (
                 <>
                     <Check /> Ordered
                 </>
@@ -118,8 +133,8 @@ ${window.location.origin}/ordering
 
 
 
+
 export function RepairButton({ itemId }: { itemId: string }) {
-    const [isPending, startTransition] = useTransition();
     const [showModal, setShowModal] = useState(false);
     const [issue, setIssue] = useState("");
 
@@ -130,48 +145,44 @@ export function RepairButton({ itemId }: { itemId: string }) {
     const handleSubmit = () => {
         if (!issue.trim()) return;
 
-        startTransition(async () => {
-            try {
-                const result = await requestRepair(itemId, issue);
-                if (result.success) {
-                    setShowModal(false);
-                    setIssue("");
+        const issueText = issue; // Capture before clearing
 
-                    // Open Mailto Link - Fixes Google Block Issue
+        // Close modal immediately
+        setShowModal(false);
+        setIssue("");
+
+        const toastId = showToast("Submitting repair request...", "loading");
+
+        requestRepair(itemId, issueText)
+            .then((result) => {
+                if (result.success) {
+                    updateToast(toastId, "✓ Repair request submitted!", "success");
+
+                    // Open Mailto Link
                     const subject = encodeURIComponent(`[Repair Requested] ${result.itemName}`);
                     const body = encodeURIComponent(`
 Repair Requested for: ${result.itemName}
-Issue: ${issue}
+Issue: ${issueText}
 
 Approve repair at:
 ${window.location.origin}/ordering
 `);
                     window.location.href = `mailto:cuilabmanager@gmail.com?subject=${subject}&body=${body}`;
                 }
-            } catch (err) {
+            })
+            .catch((err) => {
                 console.error("Failed to request repair", err);
-                alert("Failed to submit request. Please try again.");
-            }
-        });
+                updateToast(toastId, "Failed to submit repair request", "error");
+            });
     };
 
     return (
         <>
             <button
                 onClick={handleRepairClick}
-                disabled={isPending}
                 className="w-full py-6 rounded-2xl font-bold text-xl flex items-center justify-center gap-3 shadow-lg transition-all active:scale-95 text-white bg-amber-600 hover:bg-amber-700 shadow-amber-200"
             >
-                {isPending ? (
-                    <>
-                        <Loader2 className="animate-spin" />
-                        <span>Processing...</span>
-                    </>
-                ) : (
-                    <>
-                        <Wrench /> Request Repair
-                    </>
-                )}
+                <Wrench /> Request Repair
             </button>
 
             {showModal && (
@@ -197,10 +208,10 @@ ${window.location.origin}/ordering
                             </button>
                             <button
                                 onClick={handleSubmit}
-                                disabled={isPending || !issue.trim()}
+                                disabled={!issue.trim()}
                                 className="flex-1 py-3 text-white font-bold bg-amber-600 hover:bg-amber-700 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                             >
-                                {isPending ? <Loader2 className="animate-spin" size={18} /> : "Submit Request"}
+                                Submit Request
                             </button>
                         </div>
                     </div>

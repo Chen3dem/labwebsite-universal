@@ -1,8 +1,9 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { Montserrat, Playfair_Display } from "next/font/google"; // Playfair Display is serif.
+import { Montserrat, Playfair_Display } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import FooterWrapper from "@/components/FooterWrapper";
+import { ToastContainer } from "@/components/Toast";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -35,6 +36,7 @@ export default function RootLayout({
           <Navbar />
           {children}
           <FooterWrapper />
+          <ToastContainer />
         </body>
       </html>
     </ClerkProvider>

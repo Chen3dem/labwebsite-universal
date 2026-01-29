@@ -90,7 +90,8 @@ export async function reorderItem(itemId: string) {
 
     await logActivity("Requested Reorder", item.name, item.itemId, `Requested Qty: ${qty}`);
 
-    revalidatePath(`/inventory/${itemId}`);
+    // Skip revalidatePath - optimistic UI handles the update
+    // revalidatePath(`/inventory/${itemId}`);
     return { success: true, itemId: item.itemId, itemName: item.name, requestedQuantity: qty };
 }
 
@@ -120,7 +121,8 @@ export async function requestRepair(itemId: string, issueDescription: string = "
 
     await logActivity("Requested Repair", item.name, item.itemId, issueDescription);
 
-    revalidatePath(`/inventory/${itemId}`);
+    // Skip revalidatePath - optimistic UI handles the update
+    // revalidatePath(`/inventory/${itemId}`);
     return {
         success: true,
         itemName: item.name
@@ -154,8 +156,9 @@ export async function approveItem(itemId: string) {
         await logActivity("Approved Order", item.name, itemId);
     }
 
-    revalidatePath(`/inventory/${itemId}`);
-    revalidatePath(`/intranet`);
+    // Skip revalidatePath - optimistic UI handles the update
+    // revalidatePath(`/inventory/${itemId}`);
+    // revalidatePath(`/intranet`);
 }
 
 export async function updateEquipmentStatus(itemId: string, status: string) {
@@ -181,7 +184,8 @@ export async function updateEquipmentStatus(itemId: string, status: string) {
 
     await logActivity("Updated Equipment Status", item.name, itemId, `Status: ${status}`);
 
-    revalidatePath(`/inventory/${itemId}`);
+    // Skip revalidatePath - optimistic UI handles the update
+    // revalidatePath(`/inventory/${itemId}`);
 }
 
 export async function updateStock(itemId: string, newStock: number) {
@@ -216,8 +220,9 @@ export async function updateStock(itemId: string, newStock: number) {
 
         await logActivity("Updated Stock", name, itemId, `New Stock: ${newStock}`);
 
-        revalidatePath(`/inventory/${itemId}`);
-        revalidatePath(`/inventory`);
+        // Skip revalidatePath - optimistic UI handles the update
+        // revalidatePath(`/inventory/${itemId}`);
+        // revalidatePath(`/inventory`);
         return { success: true };
     } catch (error) {
         console.error("Error in updateStock:", error);
@@ -321,8 +326,9 @@ export async function updateItemOwner(itemId: string, ownerId: string) {
 
     await patch.commit();
 
-    revalidatePath(`/inventory/${itemId}`);
-    revalidatePath(`/inventory`);
+    // Skip revalidatePath - optimistic UI handles the update
+    // revalidatePath(`/inventory/${itemId}`);
+    // revalidatePath(`/inventory`);
     return { success: true };
 }
 
@@ -543,8 +549,9 @@ export async function updateItemLocation(itemId: string, newLocation: string) {
 
     await logActivity("Updated Location", item.name, itemId, `New Location: ${newLocation}`);
 
-    revalidatePath(`/inventory/${itemId}`);
-    revalidatePath(`/inventory`);
+    // Skip revalidatePath - optimistic UI handles the update
+    // revalidatePath(`/inventory/${itemId}`);
+    // revalidatePath(`/inventory`);
     return { success: true };
 }
 
