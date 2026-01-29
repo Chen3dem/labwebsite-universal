@@ -17,7 +17,7 @@ export async function GET(request: Request) {
         const result = await performBackup();
 
         if (result.success) {
-            return NextResponse.json({ success: true, ...result });
+            return NextResponse.json(result);
         } else {
             return NextResponse.json({ success: false, error: String(result.error) }, { status: 500 });
         }
