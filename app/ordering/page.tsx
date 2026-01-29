@@ -2,7 +2,7 @@ import { createClient } from "next-sanity";
 import OrderingDashboard from "./dashboard";
 
 // Sanity Client
-const client = createClient({
+const getClient = () => createClient({
     projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
     dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
     apiVersion: "2024-01-01",
@@ -26,7 +26,7 @@ interface PendingItem {
 
 export default async function OrderingPage() {
     // Fetch Pending Orders (Approved) - "Just Ordered" (And Repairs In Progress)
-    const pendingOrders: PendingItem[] = await client.fetch(`
+    const pendingOrders: PendingItem[] = await getClient().fetch(`
         *[_type == "inventoryItem" && status == "Ordered"] {
             name,
             itemId,
@@ -37,7 +37,7 @@ export default async function OrderingPage() {
         }
     `);
 
-    const pendingApprovals: PendingItem[] = await client.fetch(`
+    const pendingApprovals: PendingItem[] = await getClient().fetch(`
         *[_type == "inventoryItem" && status == "Requested"] {
             name,
             itemId,

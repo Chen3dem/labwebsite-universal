@@ -1,14 +1,7 @@
 import { createClient } from '@sanity/client';
 import nodemailer from 'nodemailer';
 
-// Initialize Sanity Client
-const sanityClient = createClient({
-    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
-    apiVersion: '2024-01-20',
-    token: process.env.SANITY_API_TOKEN, // Needed for export
-    useCdn: false,
-});
+
 
 export async function performBackup() {
     try {
@@ -21,6 +14,15 @@ export async function performBackup() {
 
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
         const fileName = `cui-lab-backup-${timestamp}.ndjson`;
+
+        // Initialize Sanity Client
+        const sanityClient = createClient({
+            projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+            dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
+            apiVersion: '2024-01-20',
+            token: process.env.SANITY_API_TOKEN, // Needed for export
+            useCdn: false,
+        });
 
         // 2. Export Data from Sanity
         const { projectId, dataset } = sanityClient.config();
@@ -48,6 +50,11 @@ export async function performBackup() {
             throw new Error(`Backup too large for email (${fileSizeMb.toFixed(2)} MB). Limit is ~25MB.`);
         }
 
+        // 2a. Fetch Manager Email for Recipient
+        const settingsQuery = `*[_type == "siteSettings"][0]{managerEmail}`;
+        const settings = await sanityClient.fetch(settingsQuery);
+        const recipientEmail = settings?.managerEmail || process.env.EMAIL_USER;
+
         // 3. Send Email
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -57,11 +64,11 @@ export async function performBackup() {
             },
         });
 
-        console.log(`Sending email to ${process.env.EMAIL_USER}...`);
+        console.log(`Sending email to ${recipientEmail}...`);
 
         const mailOptions = {
             from: `"Cui Lab Backup Bot" <${process.env.EMAIL_USER}>`,
-            to: process.env.EMAIL_USER, // Send to self (Admin)
+            to: recipientEmail, // Send to configured Manager or fallback to Admin (self)
             subject: `[Backup] CUI Lab Website - ${new Date().toLocaleDateString()}`,
             text: `Attached is the weekly full data backup for the CUI Lab Website.
             

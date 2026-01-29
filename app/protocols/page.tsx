@@ -4,7 +4,7 @@ import { LayoutDashboard, FileText, Download, ExternalLink, Dna, Wrench, ShieldA
 import { UserButton } from "@clerk/nextjs";
 import { ProtocolControls } from "./controls";
 
-const client = createClient({
+const getClient = () => createClient({
     projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
     dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
     apiVersion: "2024-01-01",
@@ -64,7 +64,7 @@ export default async function ProtocolsPage({
     }
 
     // Fetch Data
-    const protocols: Protocol[] = await client.fetch(`
+    const protocols: Protocol[] = await getClient().fetch(`
         *[${filter.join(" && ")}] | order(title asc) {
             _id,
             title,

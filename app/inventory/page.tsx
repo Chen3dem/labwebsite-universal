@@ -5,7 +5,7 @@ import { ClipboardList, AlertCircle, CheckCircle2, Clock, PackageX, LayoutDashbo
 import { InventoryControls } from "./controls";
 import { getAllTeamMembers, getAllLocations } from "../actions";
 
-const client = createClient({
+const getClient = () => createClient({
     projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
     dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
     apiVersion: "2024-01-01",
@@ -93,7 +93,7 @@ export default async function InventoryPage({
         owner->{name, headshot},
         "imageUrl": image.asset->url
     }`;
-    const items: InventoryItem[] = await client.fetch(query, params);
+    const items: InventoryItem[] = await getClient().fetch(query, params);
 
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col pt-32">

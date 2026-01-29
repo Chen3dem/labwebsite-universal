@@ -58,7 +58,7 @@ export function EquipmentStatusSelector({ currentStatus, itemId }: { currentStat
 }
 
 
-export function ReorderButton({ currentStatus, itemId }: { currentStatus: string, itemId: string }) {
+export function ReorderButton({ currentStatus, itemId, adminEmail }: { currentStatus: string, itemId: string, adminEmail?: string }) {
     const [status, setStatus] = useState(currentStatus);
 
     // Sync with props when they change
@@ -91,7 +91,8 @@ Quantity: ${result.requestedQuantity}
 Please review and approve this request on the Intranet:
 ${window.location.origin}/ordering
 `);
-                    window.location.href = `mailto:cuilabmanager@gmail.com?subject=${subject}&body=${body}`;
+                    const recipient = adminEmail || 'cuilabmanager@gmail.com';
+                    window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
                 }
             })
             .catch((err) => {
@@ -134,7 +135,7 @@ ${window.location.origin}/ordering
 
 
 
-export function RepairButton({ itemId }: { itemId: string }) {
+export function RepairButton({ itemId, adminEmail }: { itemId: string, adminEmail?: string }) {
     const [showModal, setShowModal] = useState(false);
     const [issue, setIssue] = useState("");
 
@@ -167,7 +168,8 @@ Issue: ${issueText}
 Approve repair at:
 ${window.location.origin}/ordering
 `);
-                    window.location.href = `mailto:cuilabmanager@gmail.com?subject=${subject}&body=${body}`;
+                    const recipient = adminEmail || 'cuilabmanager@gmail.com';
+                    window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
                 }
             })
             .catch((err) => {

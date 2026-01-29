@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { FEATURED_PROJECTS_QUERY, LATEST_NEWS_QUERY, HOME_PAGE_QUERY } from "@/sanity/lib/queries";
+import { FEATURED_PROJECTS_QUERY, LATEST_NEWS_QUERY, HOME_PAGE_QUERY, SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
 import Image from "next/image";
 import HeroSlider from "@/components/HeroSlider";
 import { urlFor } from "@/sanity/lib/image";
@@ -8,10 +8,11 @@ import { urlFor } from "@/sanity/lib/image";
 export const revalidate = 60;
 
 export default async function Home() {
-    const [featuredProjects, latestNews, homePageData] = await Promise.all([
+    const [featuredProjects, latestNews, homePageData, siteSettings] = await Promise.all([
         sanityFetch({ query: FEATURED_PROJECTS_QUERY }),
         sanityFetch({ query: LATEST_NEWS_QUERY }),
         sanityFetch({ query: HOME_PAGE_QUERY }),
+        sanityFetch({ query: SITE_SETTINGS_QUERY }),
     ]);
 
     return (
@@ -25,10 +26,10 @@ export default async function Home() {
                         {/* Left Column: Text */}
                         <div className="space-y-6 lg:col-span-5">
                             <h1 className="relative z-20 font-display font-bold text-slate-900 leading-tight text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-4xl">
-                                {homePageData?.heroTitle || "Deciphering Cellular Signaling on Membranes"}
+                                {homePageData?.heroTitle || siteSettings?.description || "Edit Hero Title in Sanity Studio"}
                             </h1>
                             <p className="relative z-20 text-slate-600 font-light max-w-lg leading-relaxed text-base sm:text-lg md:text-xl mt-6">
-                                The Cui Lab illuminates the hidden mechanisms of membrane-localized signaling events, remodeling our understanding of cellular adaptation.
+                                Edit this hero description in Sanity Studio (Site Settings).
                             </p>
                             <div className="pt-2 flex flex-wrap gap-4">
                                 <Link
@@ -61,31 +62,19 @@ export default async function Home() {
                                     />
                                 </div>
                             ) : (
-                                /* Fallback to original circles if no image set */
-                                <>
-                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] lg:w-[45vw] lg:h-[45vw] bg-secondary/30 rounded-full blur-3xl -z-10 animate-pulse"></div>
-                                    <div className="absolute top-0 right-0 lg:top-20 w-[15vw] h-[15vw] bg-accent/40 rounded-full mix-blend-multiply filter blur-xl animate-bounce duration-[3000ms]"></div>
-                                    <div className="absolute bottom-0 left-0 lg:bottom-10 lg:left-10 w-[20vw] h-[20vw] bg-primary/20 rounded-full mix-blend-multiply filter blur-xl animate-pulse duration-[4000ms]"></div>
-
-                                    <div className="relative z-10 w-full h-full">
-                                        <div className="absolute top-0 right-0 lg:top-10 lg:right-10 w-[45vw] h-[45vw] sm:w-[35vw] sm:h-[35vw] md:w-[25vw] md:h-[25vw] rounded-full overflow-hidden border-4 border-white shadow-2xl shape-blob">
-                                            {featuredProjects[0]?.mainImage ? (
-                                                <Image src={urlFor(featuredProjects[0].mainImage).url()} alt="Research" fill className="object-cover scale-110" />
-                                            ) : (
-                                                <div className="w-full h-full bg-slate-200"></div>
-                                            )}
-                                        </div>
-
-                                        <div className="absolute bottom-0 left-0 lg:bottom-20 lg:left-10 w-[30vw] h-[30vw] sm:w-[25vw] sm:h-[25vw] md:w-[15vw] md:h-[15vw] rounded-full overflow-hidden border-4 border-white shadow-xl mix-blend-hard-light opacity-90">
-                                            {featuredProjects[1]?.mainImage ? (
-                                                <Image src={urlFor(featuredProjects[1].mainImage).url()} alt="Research" fill className="object-cover grayscale contrast-125" />
-                                            ) : (
-                                                <div className="w-full h-full bg-primary/50"></div>
-                                            )}
-                                            <div className="absolute inset-0 bg-primary/40 mix-blend-color"></div>
-                                        </div>
+                                /* Fallback to Placeholder if no image set */
+                                <div className="absolute inset-0 bg-slate-100 border-2 border-dashed border-slate-300 rounded-2xl flex flex-col items-center justify-center text-slate-400 p-8 text-center group">
+                                    <div className="w-20 h-20 bg-slate-200 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
                                     </div>
-                                </>
+                                    <h3 className="uppercase tracking-widest font-bold text-sm text-slate-500 mb-2">Hero Image Placeholder</h3>
+                                    <p className="text-xs text-slate-400 max-w-xs">
+                                        Add a Hero Image in Sanity Studio<br />
+                                        (Home Page &gt; Hero Image)
+                                    </p>
+                                </div>
                             )}
                         </div>
                     </div>

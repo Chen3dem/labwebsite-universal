@@ -1,12 +1,13 @@
-# Cui Lab Website
+# Universal Lab Website Template
 
-This is the official website for the **Cui Lab** at the University, led by Dr. Zhicheng Cui.
-The lab investigates mechanisms of lysosomal signaling and cellular dormancy.
+This is a "plug and play" website template for research labs, originally built for the Cui Lab.
+It features a dynamic configuration system managed via Sanity CMS, allowing any lab to customize their site without touching code.
 
-## Tech Stack
-- **Framework**: [Next.js](https://nextjs.org) (App Router)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com)
-- **CMS**: [Sanity](https://sanity.io) (Currently using Mock Data)
+## Key Features
+- **Dynamic Configuration**: Manage Lab Name, Logo, Social Links, and Contact Info via Sanity (`Site Settings`).
+- **Content Types**: Team Members, Research Projects, Publications, News, and Intranet.
+- **Intranet**: Built-in inventory and order management system.
+- **Tech Stack**: Next.js (App Router), Tailwind CSS, Sanity CMS.
 
 ## Getting Started
 
@@ -15,16 +16,24 @@ The lab investigates mechanisms of lysosomal signaling and cellular dormancy.
     npm install
     ```
 
-2.  **Run the development server**:
+2.  **Environment Setup**:
+    Ensure you have `.env.local` configured with your Sanity Project ID and Dataset.
+    ```bash
+    NEXT_PUBLIC_SANITY_PROJECT_ID=your_project_id
+    NEXT_PUBLIC_SANITY_DATASET=production
+    ```
+
+3.  **Run the development server**:
     ```bash
     npm run dev
     ```
 
-3.  Open [http://localhost:3000](http://localhost:3000) with your browser.
+4.  **Open Sanity Studio**:
+    Go to `/studio` to configure your `Site Settings` and add content.
 
 ## Project Structure
 - `app/`: Application routes and pages.
-- `components/`: Reusable UI components (Navbar, Footer, Cards).
-- `sanity/`: Sanity configuration and mock data (`sanity/lib/mockData.ts`).
+- `components/`: Reusable UI components.
+- `sanity/`: Sanity configuration and schemas.
 - `public/`: Static assets.
 

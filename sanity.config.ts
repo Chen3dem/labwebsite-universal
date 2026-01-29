@@ -12,7 +12,27 @@ export default defineConfig({
   projectId,
   dataset,
   plugins: [
-    structureTool(),
+    structureTool({
+      structure: (S: any) =>
+        S.list()
+          .title('Content')
+          .items([
+            // Singleton: Site Settings
+            S.listItem()
+              .title('Site Settings')
+              .id('siteSettings')
+              .child(
+                S.document()
+                  .schemaType('siteSettings')
+                  .documentId('siteSettings')
+              ),
+            // Regular document types
+            S.divider(),
+            ...S.documentTypeListItems().filter(
+              (item: any) => item.getId() !== 'siteSettings'
+            ),
+          ]),
+    }),
     visionTool(),
   ],
   schema: {

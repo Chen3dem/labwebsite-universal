@@ -134,7 +134,23 @@ export default async function PublicationsPage(props: { searchParams: Promise<{ 
                             ))}
                         </div>
                     ) : (
-                        <p className="text-slate-500 text-center">No publications listed yet.</p>
+                        <div className="border-2 border-dashed border-slate-200 rounded-3xl p-12 text-center flex flex-col items-center justify-center min-h-[300px]">
+                            <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mb-4">
+                                <span className="text-4xl">📚</span>
+                            </div>
+                            <h2 className="text-2xl font-bold text-slate-800 mb-2">No Publications Yet</h2>
+                            <p className="text-slate-500 mb-6 max-w-md mx-auto">
+                                Add your lab's publications in <strong>Sanity Studio &gt; Publications</strong>.
+                            </p>
+                            <div className="w-full max-w-2xl bg-white border border-slate-200 p-4 rounded-lg shadow-sm opacity-60">
+                                <div className="h-4 bg-slate-200 rounded w-3/4 mb-2"></div>
+                                <div className="h-3 bg-slate-100 rounded w-1/2 mb-3"></div>
+                                <div className="flex gap-2">
+                                    <div className="h-3 bg-blue-50 rounded w-16"></div>
+                                    <div className="h-3 bg-slate-50 rounded w-12"></div>
+                                </div>
+                            </div>
+                        </div>
                     )}
                 </div>
 

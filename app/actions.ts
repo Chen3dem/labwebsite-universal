@@ -5,18 +5,17 @@ import { revalidatePath } from "next/cache";
 import { sendApprovalRequestEmail, sendRepairRequestEmail } from "@/lib/email";
 import { currentUser } from "@clerk/nextjs/server";
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET;
-const apiVersion = "2024-01-01";
 const token = process.env.SANITY_API_TOKEN;
 
-const client = createClient({
-    projectId,
-    dataset,
-    apiVersion,
-    useCdn: false,
-    token,
-});
+const getClient = () => {
+    return createClient({
+        projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+        dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
+        apiVersion: "2024-01-01",
+        useCdn: false,
+        token: process.env.SANITY_API_TOKEN,
+    });
+};
 
 async function logActivity(action: string, targetName: string, targetId: string, details?: string) {
     try {
@@ -39,7 +38,7 @@ async function logActivity(action: string, targetName: string, targetId: string,
         };
 
         // Ensure the daily document exists
-        await client.createIfNotExists({
+        await getClient().createIfNotExists({
             _id: docId,
             _type: 'dailyActivityLog',
             date: dateKey,
@@ -47,7 +46,7 @@ async function logActivity(action: string, targetName: string, targetId: string,
         });
 
         // Append the event
-        await client
+        await getClient()
             .patch(docId)
             .setIfMissing({ events: [] })
             .append('events', [event])
@@ -65,7 +64,7 @@ export async function reorderItem(itemId: string) {
 
     // Find the document ID and details using the itemId field
     const query = `*[_type == "inventoryItem" && itemId == $itemId][0]{_id, name, itemId, minStock, stock}`;
-    const item = await client.fetch(query, { itemId });
+    const item = await getClient().fetch(query, { itemId });
 
     if (!item?._id) {
         throw new Error(`Item not found: ${itemId}`);
@@ -77,7 +76,7 @@ export async function reorderItem(itemId: string) {
     const needed = minStock - currentStock;
     const qty = Math.max(1, needed);
 
-    await client
+    await getClient()
         .patch(item._id)
         .set({
             status: "Requested",
@@ -99,14 +98,14 @@ export async function requestRepair(itemId: string, issueDescription: string = "
     if (!token) throw new Error("Missing SANITY_API_TOKEN");
 
     const query = `*[_type == "inventoryItem" && itemId == $itemId][0]{_id, name, itemId, owner->{name}, category}`;
-    const item = await client.fetch(query, { itemId });
+    const item = await getClient().fetch(query, { itemId });
 
     if (!item?._id) throw new Error(`Item not found: ${itemId}`);
 
     // Update status to 'Requested' (so it appears on ordering page)
     // Update equipmentStatus to 'Finicky' (to alert users)
     // Save the request note
-    await client
+    await getClient()
         .patch(item._id)
         .set({
             status: 'Requested',
@@ -133,13 +132,13 @@ export async function approveItem(itemId: string) {
     if (!token) throw new Error("Missing SANITY_API_TOKEN");
 
     const query = `*[_type == "inventoryItem" && itemId == $itemId][0]{_id, name, category, equipmentStatus}`;
-    const item = await client.fetch(query, { itemId });
+    const item = await getClient().fetch(query, { itemId });
 
     if (!item?._id) throw new Error(`Item not found: ${itemId}`);
 
     if (item.category === 'Equipment') {
         // For equipment, approval means confirming the repair order
-        await client.patch(item._id).set({
+        await getClient().patch(item._id).set({
             status: "Ordered", // Moves it to 'Just Ordered' list
             equipmentStatus: "Repair Requested",
             orderedAt: new Date().toISOString()
@@ -148,7 +147,7 @@ export async function approveItem(itemId: string) {
         await logActivity("Approved Repair", item.name, itemId);
     } else {
         // Standard Inventory Item
-        await client.patch(item._id).set({
+        await getClient().patch(item._id).set({
             status: "Ordered",
             orderedAt: new Date().toISOString()
         }).commit();
@@ -165,11 +164,11 @@ export async function updateEquipmentStatus(itemId: string, status: string) {
     if (!token) throw new Error("Missing SANITY_API_TOKEN");
 
     const query = `*[_type == "inventoryItem" && itemId == $itemId][0]{_id, name}`;
-    const item = await client.fetch(query, { itemId });
+    const item = await getClient().fetch(query, { itemId });
 
     if (!item?._id) throw new Error(`Item not found: ${itemId}`);
 
-    const patch = client.patch(item._id).set({ equipmentStatus: status });
+    const patch = getClient().patch(item._id).set({ equipmentStatus: status });
 
     // If marked as Working, reset global status to In Stock (removes from Ordering list)
     // And set the repairedAt timestamp
@@ -197,7 +196,7 @@ export async function updateStock(itemId: string, newStock: number) {
     try {
         // Find the document ID and minStock using the itemId field
         const query = `*[_type == "inventoryItem" && itemId == $itemId][0]{_id, minStock, name}`;
-        const item = await client.fetch(query, { itemId });
+        const item = await getClient().fetch(query, { itemId });
 
         if (!item || !item._id) {
             return { success: false, error: `Item not found: ${itemId}` };
@@ -210,7 +209,7 @@ export async function updateStock(itemId: string, newStock: number) {
         if (newStock === 0) status = "Out of Stock";
         else if (newStock < minStock) status = "Low Stock";
 
-        await client
+        await getClient()
             .patch(documentId)
             .set({
                 stock: newStock,
@@ -241,7 +240,7 @@ export async function getItemDetails(itemId: string) {
         location,
         status
     }`;
-    return await client.fetch(query, { itemId });
+    return await getClient().fetch(query, { itemId });
 }
 
 export async function receiveItem(itemId: string, quantityReceived: number, imageBase64?: string) {
@@ -257,7 +256,7 @@ export async function receiveItem(itemId: string, quantityReceived: number, imag
     if (newStock === 0) status = "Out of Stock";
     else if (newStock < minStock) status = "Low Stock";
 
-    let patch = client
+    let patch = getClient()
         .patch(item._id)
         .set({
             stock: newStock,
@@ -271,7 +270,7 @@ export async function receiveItem(itemId: string, quantityReceived: number, imag
             const base64Data = parts.length > 1 ? parts[1] : parts[0];
             const buffer = Buffer.from(base64Data, 'base64');
 
-            const asset = await client.assets.upload('image', buffer, {
+            const asset = await getClient().assets.upload('image', buffer, {
                 filename: `inventory-${item.itemId}-${Date.now()}.jpg`
             });
 
@@ -310,7 +309,7 @@ export async function updateItemOwner(itemId: string, ownerId: string) {
     const item = await getItemDetails(itemId);
     if (!item) throw new Error(`Item not found: ${itemId}`);
 
-    const patch = client.patch(item._id);
+    const patch = getClient().patch(item._id);
 
     if (ownerId === 'lab-stock') {
         // Unset owner for Lab Stock
@@ -336,7 +335,7 @@ export async function updateItemOwner(itemId: string, ownerId: string) {
 async function generateNextLabId(category: string = 'General'): Promise<string> {
     // 1. Fetch ALL existing Lab IDs to ensure uniqueness across the board
     const query = `*[_type == "inventoryItem" && defined(itemId) && itemId match "CUI-LAB-*"].itemId`;
-    const allIds: string[] = await client.fetch(query);
+    const allIds: string[] = await getClient().fetch(query);
 
     const usedNumbers = new Set<number>();
     for (const id of allIds) {
@@ -385,13 +384,13 @@ export async function searchInventoryItems(queryText: string) {
         "imageUrl": image.asset->url
     }`;
 
-    return await client.fetch(query, { q: queryText });
+    return await getClient().fetch(query, { q: queryText });
 }
 
 // Helper to generate the next available Plasmid ID (ZC-Plasmid-xxxx)
 async function generateNextPlasmidId(): Promise<string> {
     const query = `*[_type == "inventoryItem" && defined(itemId) && itemId match "ZC-Plasmid-*"].itemId`;
-    const allIds: string[] = await client.fetch(query);
+    const allIds: string[] = await getClient().fetch(query);
 
     const usedNumbers = new Set<number>();
     for (const id of allIds) {
@@ -456,7 +455,7 @@ export async function createInventoryItem(data: {
             const buffer = Buffer.from(base64Data, 'base64');
 
             // Upload to Sanity
-            const asset = await client.assets.upload('image', buffer, {
+            const asset = await getClient().assets.upload('image', buffer, {
                 filename: `inventory-${finalItemId}-${Date.now()}.jpg`
             });
 
@@ -509,7 +508,7 @@ export async function createInventoryItem(data: {
         };
     }
 
-    const result = await client.create(doc);
+    const result = await getClient().create(doc);
 
     await logActivity("Created Item", data.name, finalItemId || "unknown", `Initial Stock: ${data.stock}`);
 
@@ -521,7 +520,7 @@ export async function createInventoryItem(data: {
 }
 
 export async function getAllTeamMembers() {
-    return await client.fetch(`*[_type == "teamMember" && name != "Zhicheng (Chen) Cui" && name != "Lab Stock"] | order(name asc) {
+    return await getClient().fetch(`*[_type == "teamMember" && name != "Zhicheng (Chen) Cui" && name != "Lab Stock"] | order(name asc) {
         _id,
         name,
         role,
@@ -531,7 +530,7 @@ export async function getAllTeamMembers() {
 
 export async function getAllLocations() {
     // Determine unique locations from existing items
-    const locations: string[] = await client.fetch(`*[_type == "inventoryItem" && defined(location)].location`);
+    const locations: string[] = await getClient().fetch(`*[_type == "inventoryItem" && defined(location)].location`);
     // Unique and sort
     return Array.from(new Set(locations)).sort();
 }
@@ -542,7 +541,7 @@ export async function updateItemLocation(itemId: string, newLocation: string) {
     const item = await getItemDetails(itemId);
     if (!item) throw new Error(`Item not found: ${itemId}`);
 
-    await client
+    await getClient()
         .patch(item._id)
         .set({ location: newLocation })
         .commit();
@@ -571,7 +570,7 @@ export async function addInventoryNote(itemId: string, content: string) {
         author: authorName
     };
 
-    await client
+    await getClient()
         .patch(item._id)
         .setIfMissing({ notes: [] })
         .append('notes', [note])

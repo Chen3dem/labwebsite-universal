@@ -9,8 +9,10 @@ import { UserButton } from "@clerk/nextjs";
 import { ReorderButton, RepairButton, EquipmentStatusSelector, PrintQRButton } from "./submit-button";
 import { StockControl } from "./stock-control";
 import { ItemNotes } from "./item-notes";
+import { sanityFetch } from "@/sanity/lib/fetch";
+import { SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
 
-const client = createClient({
+const getClient = () => createClient({
     projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
     dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
     apiVersion: "2024-01-01",
@@ -49,11 +51,12 @@ export default async function InventoryItemPage({
         notes
     }`;
 
-    // Fetch item, team members, and locations in parallel
-    const [item, allMembers, allLocations] = await Promise.all([
-        client.fetch(query, { itemId }),
+    // Fetch item, team members, locations, and site settings
+    const [item, allMembers, allLocations, siteSettings] = await Promise.all([
+        getClient().fetch(query, { itemId }),
         getAllTeamMembers(),
-        getAllLocations()
+        getAllLocations(),
+        sanityFetch({ query: SITE_SETTINGS_QUERY })
     ]);
 
     if (!item) {
@@ -71,6 +74,7 @@ export default async function InventoryItemPage({
 
     const mainImage = item.historyImages?.[0]?.url || item.imageUrl;
     const mainTimestamp = item.historyImages?.[0]?.timestamp;
+    const managerEmail = siteSettings?.managerEmail || "";
 
     // Set backUrl: use provided backUrl, or navigate to item's category, or fallback to /inventory
     const categoryBackUrl = item.category ? `/inventory?category=${item.category}` : '/inventory';
@@ -176,11 +180,11 @@ export default async function InventoryItemPage({
                 <div className="mt-auto">
                     {item.category === 'Equipment' ? (
                         (item.equipmentStatus && item.equipmentStatus !== 'Working') && (
-                            <RepairButton itemId={itemId} />
+                            <RepairButton itemId={itemId} adminEmail={managerEmail} />
                         )
                     ) : (
                         item.status !== 'In Stock' && (
-                            <ReorderButton currentStatus={item.status} itemId={itemId} />
+                            <ReorderButton currentStatus={item.status} itemId={itemId} adminEmail={managerEmail} />
                         )
                     )}
                 </div>

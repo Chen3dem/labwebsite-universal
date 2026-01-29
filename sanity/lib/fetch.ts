@@ -1,4 +1,5 @@
-import { client } from "@/sanity/client";
+import { getClient } from "@/sanity/client";
+
 import { projectId } from "@/sanity/env";
 import {
     ALL_PROJECTS_QUERY,
@@ -26,5 +27,5 @@ export async function sanityFetch({ query, params = {} }: { query: string; param
         return [];
     }
 
-    return client.fetch(query, params);
+    return getClient().fetch(query, params);
 }

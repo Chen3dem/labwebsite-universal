@@ -51,30 +51,48 @@ export default async function TeamPage() {
 
                 {/* Unified Team Grid */}
                 <div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
-                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                        {sortedMembers.map((member: any) => {
-                            // Map 'pi' to 'Principal Investigator' if needed, or use the role map
-                            const displayRole = ROLE_TITLES[member.role] || member.role;
+                    {sortedMembers.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+                            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                            {sortedMembers.map((member: any) => {
+                                // Map 'pi' to 'Principal Investigator' if needed, or use the role map
+                                const displayRole = ROLE_TITLES[member.role] || member.role;
 
-                            // Fallback bio for PI if empty
-                            let displayBio = member.bio;
-                            if (member.role === 'pi' && !displayBio) {
-                                displayBio = "Principal Investigator at the University of Colorado Anschutz Medical Campus. Dr. Cui's research focuses on the mechanisms of lysosomal signaling and cellular dormancy. Prior to starting his lab, he completed his postdoctoral training at the Whitehead Institute/MIT with Dr. David Sabatini. He received his Ph.D. in Biophysics from Harvard University.";
-                            }
+                                // Use bio directly from sanity
+                                const displayBio = member.bio;
 
-                            return (
-                                <TeamMemberCard
-                                    key={member._id}
-                                    name={member.name}
-                                    role={displayRole}
-                                    bio={displayBio}
-                                    headshot={member.headshot}
-                                    fit={member.imageFit}
-                                />
-                            );
-                        })}
-                    </div>
+                                return (
+                                    <TeamMemberCard
+                                        key={member._id}
+                                        name={member.name}
+                                        role={displayRole}
+                                        bio={displayBio}
+                                        headshot={member.headshot}
+                                        fit={member.imageFit}
+                                    />
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <div className="border-2 border-dashed border-slate-200 rounded-3xl p-12 text-center flex flex-col items-center justify-center min-h-[400px]">
+                            <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mb-4">
+                                <span className="text-4xl">👥</span>
+                            </div>
+                            <h2 className="text-2xl font-bold text-slate-800 mb-2">Meet the Team</h2>
+                            <p className="text-slate-500 mb-8 max-w-md mx-auto">
+                                Add your team members in <strong>Sanity Studio &gt; Team Members</strong>.
+                            </p>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-4xl opacity-50 pointer-events-none blur-sm select-none">
+                                {[1, 2, 3].map((i) => (
+                                    <div key={i} className="bg-slate-50 rounded-xl p-6 flex flex-col items-center">
+                                        <div className="w-32 h-32 rounded-full bg-slate-200 mb-4"></div>
+                                        <div className="h-6 w-3/4 bg-slate-200 rounded mb-2"></div>
+                                        <div className="h-4 w-1/2 bg-slate-100 rounded"></div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
 
             </div>

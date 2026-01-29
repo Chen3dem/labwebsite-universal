@@ -4,6 +4,8 @@ import { Montserrat, Playfair_Display } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import FooterWrapper from "@/components/FooterWrapper";
 import { ToastContainer } from "@/components/Toast";
+import { sanityFetch } from "@/sanity/lib/fetch";
+import { SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -16,16 +18,23 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
 });
 
-export const metadata: Metadata = {
-  title: "CUI Lab",
-  description: "Academic Research Lab",
-};
+// Force dynamic rendering to avoid static generation issues with Sanity client
+export const dynamic = 'force-dynamic';
 
-export default function RootLayout({
+export async function generateMetadata(): Promise<Metadata> {
+  const siteSettings = await sanityFetch({ query: SITE_SETTINGS_QUERY });
+  return {
+    title: siteSettings?.labName || "User Lab",
+    description: siteSettings?.description || "Academic Research Lab",
+  };
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const siteSettings = await sanityFetch({ query: SITE_SETTINGS_QUERY });
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
@@ -33,9 +42,9 @@ export default function RootLayout({
           className={`${montserrat.variable} ${playfair.variable} font-sans antialiased bg-white text-slate-900`}
           suppressHydrationWarning
         >
-          <Navbar />
+          <Navbar siteSettings={siteSettings} />
           {children}
-          <FooterWrapper />
+          <FooterWrapper siteSettings={siteSettings} />
           <ToastContainer />
         </body>
       </html>

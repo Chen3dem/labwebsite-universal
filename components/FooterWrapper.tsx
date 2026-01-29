@@ -3,7 +3,11 @@
 import { usePathname } from "next/navigation";
 import Footer from "./Footer";
 
-export default function FooterWrapper() {
+interface FooterWrapperProps {
+    siteSettings?: any;
+}
+
+export default function FooterWrapper({ siteSettings }: FooterWrapperProps) {
     const pathname = usePathname();
 
     // Hide Footer on Sanity Studio
@@ -11,5 +15,5 @@ export default function FooterWrapper() {
 
 
 
-    return <Footer />;
+    return <Footer siteSettings={siteSettings} />;
 }

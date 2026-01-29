@@ -10,8 +10,10 @@ import { nfcTag } from './nfcTag';
 import { protocol } from './protocol';
 
 import { dailyActivityLog } from './dailyActivityLog';
+import { siteSettings } from './siteSettings';
 
 export const schemaTypes: SchemaTypeDefinition[] = [
+  siteSettings,
   researchProject,
   publication,
   teamMember,

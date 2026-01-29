@@ -5,7 +5,7 @@ import { ActivitySearch } from "./search";
 
 export const revalidate = 0;
 
-const client = createClient({
+const getClient = () => createClient({
     projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
     dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
     apiVersion: "2024-01-01",
@@ -39,7 +39,7 @@ export default async function ActivityLogPage({
         // Note: Sanity doesn't support deep array filtering efficiently in GROQ for this structure universally,
         // but we can fetch recent logs and filter in memory, or use a specific GROQ.
         // Let's fetch the last 30 days of logs and filter in code for flexibility.
-        const logs = await client.fetch(`*[_type == "dailyActivityLog"] | order(date desc) [0...30] {
+        const logs = await getClient().fetch(`*[_type == "dailyActivityLog"] | order(date desc) [0...30] {
             events
         }`);
 
@@ -52,7 +52,7 @@ export default async function ActivityLogPage({
         );
     } else {
         // Default Mode: Fetch last 7 days of events
-        const logs = await client.fetch(`*[_type == "dailyActivityLog"] | order(date desc) [0...7] {
+        const logs = await getClient().fetch(`*[_type == "dailyActivityLog"] | order(date desc) [0...7] {
             events
         }`);
         events = logs.flatMap((log: any) => log.events || []);

@@ -82,3 +82,17 @@ export const GALLERY_IMAGES_QUERY = defineQuery(`*[_type == "gallery"] | order(p
 }`);
 
 
+
+export const SITE_SETTINGS_QUERY = defineQuery(`*[_type == "siteSettings"][0] {
+  labName,
+  logo,
+  institutionLogo,
+  description,
+  footerAddress,
+  contactEmail,
+  managerEmail,
+  socialKey,
+  quickLinks,
+  researchIntro,
+  joinUs,
+}`);

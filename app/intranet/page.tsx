@@ -1,19 +1,14 @@
 import Link from "next/link";
 import { Scan, ClipboardList, FlaskConical, LogOut, Box, ShoppingCart, ArrowRight } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
-import { createClient } from "next-sanity";
+
 
 import { ApproveButton } from "./approval-button";
 
-// Sanity Client (Should ideally be in a shared lib)
-const client = createClient({
-    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
-    apiVersion: "2024-01-01",
-    useCdn: false,
-});
+// Sanity Client removed (unused and caused build issues)
 
 export const revalidate = 0; // Ensure fresh data on every load
+export const dynamic = 'force-dynamic';
 
 interface PendingItem {
     name: string;
@@ -57,7 +52,7 @@ export default async function IntranetPage() {
         <div className="min-h-screen bg-slate-50 flex flex-col pt-32">
             <header className="bg-white shadow-sm p-4 flex justify-between items-center sticky top-24 z-10 transition-[top] duration-300">
                 <h1 className="text-xl font-bold font-serif text-slate-800">
-                    Cui Lab Intranet
+                    Lab Intranet
                 </h1>
                 <UserButton afterSignOutUrl="/" />
             </header>

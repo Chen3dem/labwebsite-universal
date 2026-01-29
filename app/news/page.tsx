@@ -97,7 +97,15 @@ export default async function NewsPage(props: { searchParams: Promise<{ page?: s
                             );
                         })
                     ) : (
-                        <p className="text-slate-500 text-center">No news to display.</p>
+                        <div className="border-2 border-dashed border-slate-200 rounded-3xl p-12 text-center flex flex-col items-center justify-center min-h-[300px] ml-4 md:ml-0">
+                            <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mb-4">
+                                <span className="text-4xl text-slate-400">📰</span>
+                            </div>
+                            <h2 className="text-2xl font-bold text-slate-800 mb-2">Likely Story...</h2>
+                            <p className="text-slate-500 mb-6 max-w-md mx-auto">
+                                Add news, announcements, or updates in <strong>Sanity Studio &gt; News</strong>.
+                            </p>
+                        </div>
                     )}
                 </div>
 
@@ -131,7 +139,7 @@ export default async function NewsPage(props: { searchParams: Promise<{ page?: s
                 )}
 
                 {/* Image Slider - Fun Moments */}
-                {galleryImages.length > 0 && (
+                {galleryImages.length > 0 ? (
                     <div className="mb-12">
                         <div className="text-center mb-10">
                             <h2 className="text-5xl md:text-6xl font-display font-bold mb-6 text-slate-900">Fun</h2>
@@ -203,6 +211,21 @@ export default async function NewsPage(props: { searchParams: Promise<{ page?: s
                                 )}
                             </div>
                         )}
+                    </div>
+                ) : (
+                    <div className="mb-12">
+                        <div className="text-center mb-10">
+                            <h2 className="text-5xl md:text-6xl font-display font-bold mb-6 text-slate-900">Fun</h2>
+                        </div>
+                        <div className="border-2 border-dashed border-slate-200 rounded-3xl p-12 text-center flex flex-col items-center justify-center min-h-[300px]">
+                            <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mb-4">
+                                <span className="text-4xl">🎉</span>
+                            </div>
+                            <h2 className="text-2xl font-bold text-slate-800 mb-2">Capture the Moments</h2>
+                            <p className="text-slate-500 mb-6 max-w-md mx-auto">
+                                Add photos of lab outings, conferences, or fun times in <strong>Sanity Studio &gt; Gallery Images</strong>.
+                            </p>
+                        </div>
                     </div>
                 )}
 

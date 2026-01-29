@@ -2,7 +2,7 @@ import { createClient } from "next-sanity";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
-const client = createClient({
+const getClient = () => createClient({
     projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
     dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
     apiVersion: "2024-01-01",
@@ -24,7 +24,7 @@ export default async function NFCDispatcherPage({
         protocol->{_id}
     }`;
 
-    const tagData = await client.fetch(query, { tagId });
+    const tagData = await getClient().fetch(query, { tagId });
 
     if (!tagData) {
         return (

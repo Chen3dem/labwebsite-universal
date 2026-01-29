@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { performBackup } from '@/lib/backup';
 
 export const maxDuration = 60; // Allow 60 seconds for backup
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
     // 1. Verify Authentication

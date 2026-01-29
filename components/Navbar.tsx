@@ -16,7 +16,19 @@ const LINKS = [
   { name: 'Contact', href: '/contact' },
 ];
 
-export default function Navbar() {
+import { urlFor } from '@/sanity/lib/image';
+
+interface NavbarProps {
+  siteSettings?: {
+    labName?: string;
+    logo?: any;
+    footerAddress?: string[];
+    contactEmail?: string;
+    socialKey?: any[];
+  };
+}
+
+export default function Navbar({ siteSettings }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -49,17 +61,25 @@ export default function Navbar() {
 
           {/* Logo / Brand */}
           <Link href="/" className="flex items-center gap-4 group">
-            <div className="relative w-16 h-16 flex-shrink-0 rounded-full overflow-hidden border border-slate-200 shadow-sm">
-              <Image
-                src="/lab-logo-tree.jpg"
-                alt="Cui Lab Logo"
-                fill
-                className="object-cover"
-              />
-            </div>
+            {siteSettings?.logo?.asset ? (
+              <div className="relative w-16 h-16 flex-shrink-0 rounded-full overflow-hidden border border-slate-200 shadow-sm">
+                <Image
+                  src={urlFor(siteSettings.logo).url()}
+                  alt={siteSettings.logo?.alt || "Lab Logo"}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            ) : (
+              <div className="relative w-16 h-16 flex-shrink-0 rounded-full overflow-hidden border border-slate-200 shadow-sm bg-slate-100 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+            )}
             <div className="flex flex-row items-center">
               <span className="text-xl font-display font-bold text-slate-900 tracking-tight leading-none group-hover:text-primary transition-colors whitespace-nowrap">
-                THE CUI LAB
+                {siteSettings?.labName?.toUpperCase() || "EDIT IN SANITY STUDIO"}
               </span>
             </div>
           </Link>
@@ -117,15 +137,19 @@ export default function Navbar() {
               onClick={() => setIsOpen(false)}
               className="flex items-center gap-3 mb-8 border-b border-slate-700 pb-8"
             >
-              <div className="relative w-12 h-12 flex-shrink-0 rounded-full overflow-hidden border border-slate-600">
-                <Image
-                  src="/lab-logo-tree.jpg"
-                  alt="Cui Lab Logo"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <span className="text-xl font-display font-bold text-white tracking-tight">THE CUI LAB</span>
+              {siteSettings?.logo?.asset && (
+                <div className="relative w-12 h-12 flex-shrink-0 rounded-full overflow-hidden border border-slate-600">
+                  <Image
+                    src={urlFor(siteSettings.logo).url()}
+                    alt={siteSettings.logo?.alt || "Lab Logo"}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              )}
+              <span className="text-xl font-display font-bold text-white tracking-tight">
+                {siteSettings?.labName?.toUpperCase() || "EDIT IN SANITY STUDIO"}
+              </span>
             </Link>
 
             {LINKS.map((link) => (
