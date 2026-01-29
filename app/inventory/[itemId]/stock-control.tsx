@@ -25,7 +25,11 @@ export function StockControl({ itemId, initialStock }: StockControlProps) {
         }
 
         startTransition(async () => {
-            await updateStock(itemId, newStock);
+            const result = await updateStock(itemId, newStock);
+            if (!result?.success) {
+                alert(`Failed to update stock: ${result?.error || 'Unknown error'}`);
+                setValue(initialStock.toString()); // Revert
+            }
         });
     };
 

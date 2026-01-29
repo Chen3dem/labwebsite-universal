@@ -186,36 +186,43 @@ export async function updateEquipmentStatus(itemId: string, status: string) {
 
 export async function updateStock(itemId: string, newStock: number) {
     if (!token) {
-        throw new Error("Missing SANITY_API_TOKEN");
+        console.error("Missing SANITY_API_TOKEN in updateStock");
+        return { success: false, error: "Server Configuration Error: Missing Token" };
     }
 
-    // Find the document ID and minStock using the itemId field
-    const query = `*[_type == "inventoryItem" && itemId == $itemId][0]{_id, minStock, name}`;
-    const item = await client.fetch(query, { itemId });
+    try {
+        // Find the document ID and minStock using the itemId field
+        const query = `*[_type == "inventoryItem" && itemId == $itemId][0]{_id, minStock, name}`;
+        const item = await client.fetch(query, { itemId });
 
-    if (!item || !item._id) {
-        throw new Error(`Item not found: ${itemId}`);
+        if (!item || !item._id) {
+            return { success: false, error: `Item not found: ${itemId}` };
+        }
+
+        const { _id: documentId, minStock: rawMinStock, name } = item;
+        const minStock = rawMinStock ?? 5; // Handle null or undefined
+
+        let status = "In Stock";
+        if (newStock === 0) status = "Out of Stock";
+        else if (newStock < minStock) status = "Low Stock";
+
+        await client
+            .patch(documentId)
+            .set({
+                stock: newStock,
+                status: status
+            })
+            .commit();
+
+        await logActivity("Updated Stock", name, itemId, `New Stock: ${newStock}`);
+
+        revalidatePath(`/inventory/${itemId}`);
+        revalidatePath(`/inventory`);
+        return { success: true };
+    } catch (error) {
+        console.error("Error in updateStock:", error);
+        return { success: false, error: String(error) };
     }
-
-    const { _id: documentId, minStock: rawMinStock, name } = item;
-    const minStock = rawMinStock ?? 5; // Handle null or undefined
-
-    let status = "In Stock";
-    if (newStock === 0) status = "Out of Stock";
-    else if (newStock < minStock) status = "Low Stock";
-
-    await client
-        .patch(documentId)
-        .set({
-            stock: newStock,
-            status: status
-        })
-        .commit();
-
-    await logActivity("Updated Stock", name, itemId, `New Stock: ${newStock}`);
-
-    revalidatePath(`/inventory/${itemId}`);
-    revalidatePath(`/inventory`);
 }
 
 export async function getItemDetails(itemId: string) {
