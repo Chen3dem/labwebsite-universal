@@ -36,7 +36,7 @@ export default async function InventoryItemPage({
 
     const query = `*[_type == "inventoryItem" && (itemId == $itemId || barcode == $itemId)][0] {
         ...,
-        owner->{name, headshot, role},
+        owner->{_id, name, headshot, role},
         requestedAt,
         orderedAt,
         lastReceived,

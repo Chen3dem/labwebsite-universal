@@ -211,23 +211,6 @@ export default async function InventoryPage({
                                                 <p className="text-sm text-slate-500 mt-1">{item.location}</p>
                                             </div>
 
-                                            {/* Owner Badge (Hide for Equipment) */}
-                                            {!isEquipment && (item as any).owner && (item as any).owner.name !== "Zhicheng (Chen) Cui" && (
-                                                <div className="flex items-center gap-2 mt-1">
-                                                    <div className="w-5 h-5 rounded-full bg-slate-200 overflow-hidden">
-                                                        {(item as any).owner.headshot ? (
-                                                            <img src="placeholder" className="w-full h-full object-cover" />
-                                                        ) : (
-                                                            <div className="w-full h-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-[10px] font-bold">
-                                                                {(item as any).owner.name.charAt(0)}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                    <span className="text-xs text-slate-400">
-                                                        {(item as any).owner.name === 'Lab Stock' ? 'Lab Stock' : (item as any).owner.name}
-                                                    </span>
-                                                </div>
-                                            )}
 
                                             {!isEquipment && (
                                                 <div className="mt-auto pt-4 border-t border-slate-50 flex justify-between items-center text-sm">

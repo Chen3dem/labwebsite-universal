@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
 import { updateItemOwner } from "../../actions";
 import { Check, ChevronDown, User, Users } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
@@ -21,7 +20,6 @@ interface OwnerSelectorProps {
 }
 
 export function OwnerSelector({ itemId, currentOwner, allMembers }: OwnerSelectorProps) {
-    const router = useRouter();
     const [open, setOpen] = useState(false);
     const [ownerId, setOwnerId] = useState(currentOwner?._id || 'lab-stock-placeholder');
 
@@ -61,9 +59,8 @@ export function OwnerSelector({ itemId, currentOwner, allMembers }: OwnerSelecto
         updateItemOwner(itemId, memberId)
             .then(() => {
                 updateToast(toastId, `✓ Owner: ${ownerName}`, "success");
-                // Now allow prop sync again after server confirms
-                userSelectedRef.current = false;
-                router.refresh();
+                // Allow prop sync after a delay (in case of refresh from other components)
+                setTimeout(() => { userSelectedRef.current = false; }, 2000);
             })
             .catch((err) => {
                 console.error(err);

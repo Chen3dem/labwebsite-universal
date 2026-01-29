@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
 import { updateItemLocation } from "../../actions";
 import { Check, MapPin, Plus } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
@@ -14,7 +13,6 @@ interface LocationSelectorProps {
 }
 
 export function LocationSelector({ itemId, currentLocation, allLocations }: LocationSelectorProps) {
-    const router = useRouter();
     const [open, setOpen] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const [location, setLocation] = useState(currentLocation);
@@ -45,9 +43,8 @@ export function LocationSelector({ itemId, currentLocation, allLocations }: Loca
         updateItemLocation(itemId, loc)
             .then(() => {
                 updateToast(toastId, `✓ Location: ${loc}`, "success");
-                // Now allow prop sync again after server confirms
-                userSelectedRef.current = false;
-                router.refresh();
+                // Allow prop sync after a delay (in case of refresh from other components)
+                setTimeout(() => { userSelectedRef.current = false; }, 2000);
             })
             .catch((err) => {
                 console.error(err);
