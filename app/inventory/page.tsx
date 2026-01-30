@@ -3,7 +3,7 @@ import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
 import { ClipboardList, AlertCircle, CheckCircle2, Clock, PackageX, LayoutDashboard, Dna, FlaskConical, Snowflake, Package, Wrench } from "lucide-react";
 import { InventoryControls } from "./controls";
-import { getAllTeamMembers, getAllLocations } from "../actions";
+import { getAllTeamMembers, getAllLocations, getSiteSettings } from "../actions";
 
 const getClient = () => createClient({
     projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
@@ -42,9 +42,10 @@ export default async function InventoryPage({
     const { q, location, status, owner, category, type } = await searchParams;
 
     // Fetch team members and locations for the controls
-    const [owners, locations] = await Promise.all([
+    const [owners, locations, settings] = await Promise.all([
         getAllTeamMembers(),
-        getAllLocations()
+        getAllLocations(),
+        getSiteSettings()
     ]);
 
     const filters = [`_type == "inventoryItem" && !(_id in path('drafts.**'))`]; // Exclude drafts
@@ -85,7 +86,8 @@ export default async function InventoryPage({
 
     // Plasmid Type Filter
     if (type === "plasmid") {
-        filters.push(`itemId match "ZC-Plasmid-*"`);
+        // Match either the configured prefix OR the legacy default to ensure we show all
+        filters.push(`(itemId match "${settings.plasmidIdPrefix}-*" || itemId match "ZC-Plasmid-*")`);
     }
 
     const query = `*[${filters.join(" && ")}] | order(name asc) {
@@ -188,7 +190,11 @@ export default async function InventoryPage({
                                                                 </>
                                                             ) : (
                                                                 <span className="text-[10px] font-bold text-slate-800 whitespace-nowrap tracking-tight" title={item.itemId}>
-                                                                    {item.itemId ? (item.itemId.startsWith('CUI-LAB') ? item.itemId.split('-').pop() : item.itemId.slice(-6)) : '???'}
+                                                                    {item.itemId ? (
+                                                                        (item.itemId.startsWith(settings.labIdPrefix) || item.itemId.startsWith('CUI-LAB') || item.itemId.startsWith(settings.plasmidIdPrefix) || item.itemId.startsWith('ZC-Plasmid'))
+                                                                            ? item.itemId.split('-').pop()
+                                                                            : item.itemId.slice(-6)
+                                                                    ) : '???'}
                                                                 </span>
                                                             )}
                                                         </div>

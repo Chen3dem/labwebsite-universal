@@ -57,6 +57,19 @@ async function logActivity(action: string, targetName: string, targetId: string,
     }
 }
 
+// Helper to get site settings
+export async function getSiteSettings() {
+    const query = `*[_type == "siteSettings"][0]{
+        labIdPrefix,
+        plasmidIdPrefix
+    }`;
+    const settings = await getClient().fetch(query);
+    return {
+        labIdPrefix: settings?.labIdPrefix || "CUI-LAB",
+        plasmidIdPrefix: settings?.plasmidIdPrefix || "ZC-Plasmid"
+    };
+}
+
 export async function reorderItem(itemId: string) {
     if (!token) {
         throw new Error("Missing SANITY_API_TOKEN");
@@ -333,13 +346,19 @@ export async function updateItemOwner(itemId: string, ownerId: string) {
 
 // Helper to generate the next available Lab ID based on Category ranges
 async function generateNextLabId(category: string = 'General'): Promise<string> {
+    const settings = await getSiteSettings();
+    const prefix = settings.labIdPrefix;
+
     // 1. Fetch ALL existing Lab IDs to ensure uniqueness across the board
-    const query = `*[_type == "inventoryItem" && defined(itemId) && itemId match "CUI-LAB-*"].itemId`;
+    // Match against the configured prefix
+    const query = `*[_type == "inventoryItem" && defined(itemId) && itemId match "${prefix}-*"].itemId`;
     const allIds: string[] = await getClient().fetch(query);
 
     const usedNumbers = new Set<number>();
+    const regex = new RegExp(`^${prefix}-(\\d+)$`);
+
     for (const id of allIds) {
-        const match = id.match(/^CUI-LAB-(\d+)$/);
+        const match = id.match(regex);
         if (match && match[1]) {
             usedNumbers.add(parseInt(match[1], 10));
         }
@@ -356,12 +375,7 @@ async function generateNextLabId(category: string = 'General'): Promise<string> 
         nextNum++;
     }
 
-    // Safety check specific to Equipment (don't overlap with General if > 999)
-    // But practically, if we have 999 equipment, overlapping 1000 is fine if usedNumbers checks global uniqueness.
-    // Since usedNumbers checks GLOBAL usage, CUI-LAB-1000 will be skipped if generated for equipment.
-    // So distinct start points is sufficient.
-
-    return `CUI-LAB-${nextNum.toString().padStart(4, '0')}`;
+    return `${prefix}-${nextNum.toString().padStart(4, '0')}`;
 }
 
 export async function searchInventoryItems(queryText: string) {
@@ -389,12 +403,17 @@ export async function searchInventoryItems(queryText: string) {
 
 // Helper to generate the next available Plasmid ID (ZC-Plasmid-xxxx)
 async function generateNextPlasmidId(): Promise<string> {
-    const query = `*[_type == "inventoryItem" && defined(itemId) && itemId match "ZC-Plasmid-*"].itemId`;
+    const settings = await getSiteSettings();
+    const prefix = settings.plasmidIdPrefix;
+
+    const query = `*[_type == "inventoryItem" && defined(itemId) && itemId match "${prefix}-*"].itemId`;
     const allIds: string[] = await getClient().fetch(query);
 
     const usedNumbers = new Set<number>();
+    const regex = new RegExp(`^${prefix}-(\\d+)$`);
+
     for (const id of allIds) {
-        const match = id.match(/^ZC-Plasmid-(\d+)$/);
+        const match = id.match(regex);
         if (match && match[1]) {
             usedNumbers.add(parseInt(match[1], 10));
         }
@@ -405,7 +424,7 @@ async function generateNextPlasmidId(): Promise<string> {
         nextNum++;
     }
 
-    return `ZC-Plasmid-${nextNum.toString().padStart(4, '0')}`;
+    return `${prefix}-${nextNum.toString().padStart(4, '0')}`;
 }
 
 export async function createInventoryItem(data: {

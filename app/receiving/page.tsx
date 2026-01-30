@@ -4,7 +4,7 @@ import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Box, Camera, Search, Plus, Minus, Loader2, CheckCircle2, AlertCircle, PlusCircle, User, ChevronRight, LayoutDashboard } from "lucide-react";
-import { getItemDetails, receiveItem, createInventoryItem, searchInventoryItems, getAllTeamMembers, getAllLocations } from "../actions";
+import { getItemDetails, receiveItem, createInventoryItem, searchInventoryItems, getAllTeamMembers, getAllLocations, getSiteSettings } from "../actions";
 import { LocationCombobox } from "./location-combobox";
 import { BarcodeScanner } from "@/components/BarcodeScanner";
 import imageCompression from 'browser-image-compression';
@@ -38,6 +38,8 @@ export default function ReceivingPage() {
     const [availableLocations, setAvailableLocations] = useState<string[]>([
         'Chemical Cabinet'
     ]);
+    const [labIdPrefix, setLabIdPrefix] = useState("CUI-LAB");
+    const [plasmidIdPrefix, setPlasmidIdPrefix] = useState("ZC-Plasmid");
 
     // Image Handling State
     const [imageFile, setImageFile] = useState<File | null>(null);
@@ -113,6 +115,10 @@ export default function ReceivingPage() {
     };
 
     useEffect(() => {
+        getSiteSettings().then(settings => {
+            setLabIdPrefix(settings.labIdPrefix);
+            setPlasmidIdPrefix(settings.plasmidIdPrefix);
+        });
         getAllTeamMembers().then(setTeamMembers);
         getAllLocations().then(locs => {
             if (locs && locs.length > 0) {
@@ -651,7 +657,7 @@ export default function ReceivingPage() {
                                             <label htmlFor="isPlasmid" className="text-sm text-purple-800 font-medium cursor-pointer select-none flex-1">
                                                 Is this a Plasmid?
                                                 <span className="block text-xs text-purple-600 font-normal mt-0.5">
-                                                    Auto-generates ID: <strong>ZC-Plasmid-xxxx</strong>
+                                                    Auto-generates ID: <strong>{plasmidIdPrefix}-xxxx</strong>
                                                 </span>
                                             </label>
                                         </div>
@@ -681,7 +687,7 @@ export default function ReceivingPage() {
                                     </div>
                                     {!newItemBarcode && (
                                         <p className="text-xs text-slate-400 mt-1 ml-1">
-                                            Will generate: <strong>{isPlasmid ? 'ZC-Plasmid-xxxx' : 'CUI-LAB-xxxx'}</strong>
+                                            Will generate: <strong>{isPlasmid ? `${plasmidIdPrefix}-xxxx` : `${labIdPrefix}-xxxx`}</strong>
                                         </p>
                                     )}
                                 </div>

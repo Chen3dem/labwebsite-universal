@@ -15,6 +15,20 @@ export const siteSettings = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'labIdPrefix',
+      title: 'Lab ID Prefix',
+      type: 'string',
+      description: 'Prefix for general inventory items (default: CUI-LAB)',
+      initialValue: 'CUI-LAB',
+    }),
+    defineField({
+      name: 'plasmidIdPrefix',
+      title: 'Plasmid ID Prefix',
+      type: 'string',
+      description: 'Prefix for plasmid items (default: ZC-Plasmid)',
+      initialValue: 'ZC-Plasmid',
+    }),
+    defineField({
       name: 'logo',
       title: 'Logo',
       type: 'image',
