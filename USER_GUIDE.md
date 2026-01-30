@@ -73,6 +73,7 @@ graph TD
 
 ### Common Tasks
 *   **Site Settings**: Change the **Lab Name**, **Logo**, **Institution Logo**, **Footer Address**, and **Social Links**.
+*   **Inventory Configuration**: Set your **Lab ID Prefix** (default: `CUI-LAB`) and **Plasmid ID Prefix** (default: `ZC-Plasmid`). Items will auto-generate IDs using these formats (e.g., `MYLAB-0001`).
 *   **Research**: Add/Edit research projects.
 *   **Team**: Add/Edit team members.
 *   **Publications**: Add/Edit publications.
