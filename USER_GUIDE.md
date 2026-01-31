@@ -175,6 +175,12 @@ Accessible at `/inventory`, this system tracks lab equipment and supplies.
     *   **Out of Stock**: marked red.
 4.  **Reordering**: Users can click "Reorder" on an item. This opens an email pre-filled with the item details, addressed to the lab manager (configured in Site Settings).
 
+### Media & Images
+*   **Image Compression**: To save storage, use the **"Compress & Upload"** tab when selecting images in Sanity Studio.
+    *   This automatically resizes images to Max 1920px and compresses them to ~500KB.
+    *   Use this for Hero Images, Team Photos, and News Images.
+    *   Use the standard "Upload" tab only if you need raw, full-resolution files.
+
 ### NFC Tag System
 You can place physical NFC tags in the lab. Scanning them with a phone opens specific pages.
 

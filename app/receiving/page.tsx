@@ -11,8 +11,20 @@ import imageCompression from 'browser-image-compression';
 import { useRef } from "react";
 import { ToastContainer, showToast, updateToast } from "@/components/Toast";
 
+import { useUser } from "@clerk/nextjs";
+
 export default function ReceivingPage() {
+    const { user } = useUser();
     const router = useRouter();
+
+    useEffect(() => {
+        if (user) {
+            const role = (user.publicMetadata.role as string) || 'viewer';
+            if (role === 'viewer') {
+                router.replace('/intranet');
+            }
+        }
+    }, [user, router]);
     const [isPending, startTransition] = useTransition();
 
     // State

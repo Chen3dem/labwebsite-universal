@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity';
+import { RestrictedImageInput } from '../components/RestrictedImageInput';
 
 export const homePage = defineType({
     name: 'homePage',
@@ -12,6 +13,9 @@ export const homePage = defineType({
             description: 'The large image displayed on the right side of the home page hero section.',
             options: {
                 hotspot: true,
+            },
+            components: {
+                input: RestrictedImageInput,
             },
             validation: (Rule) => Rule.required(),
         }),

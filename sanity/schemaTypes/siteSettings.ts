@@ -1,5 +1,6 @@
 import { defineField, defineType, defineArrayMember } from 'sanity';
 import { CogIcon } from '@sanity/icons';
+import { RestrictedImageInput } from '../components/RestrictedImageInput';
 
 export const siteSettings = defineType({
   name: 'siteSettings',
@@ -36,6 +37,9 @@ export const siteSettings = defineType({
       options: {
         hotspot: true,
       },
+      components: {
+        input: RestrictedImageInput,
+      },
       fields: [
         defineField({
           name: 'alt',
@@ -54,6 +58,9 @@ export const siteSettings = defineType({
       description: 'The logo of your university or institution (displayed in footer and contact page)',
       options: {
         hotspot: true,
+      },
+      components: {
+        input: RestrictedImageInput,
       },
     }),
     defineField({

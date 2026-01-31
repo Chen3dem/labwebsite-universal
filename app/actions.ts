@@ -3,7 +3,20 @@
 import { createClient } from "next-sanity";
 import { revalidatePath } from "next/cache";
 import { sendApprovalRequestEmail, sendRepairRequestEmail } from "@/lib/email";
-import { currentUser } from "@clerk/nextjs/server";
+import { currentUser, auth } from "@clerk/nextjs/server";
+
+// Helper to check permissions
+async function checkRole(requiredRole: 'admin' | 'editor') {
+    const { sessionClaims } = await auth();
+    // Use type assertion since we haven't set up the official Clerk types yet
+    const metadata = (sessionClaims?.metadata as { role?: string }) || {};
+    const role = metadata.role || 'viewer'; // Default to viewer if undefined
+
+    if (role === 'admin') return true; // Admin can do anything
+    if (requiredRole === 'editor' && role === 'editor') return true;
+
+    throw new Error("Unauthorized: You do not have permission to perform this action.");
+}
 
 const token = process.env.SANITY_API_TOKEN;
 
@@ -71,6 +84,7 @@ export async function getSiteSettings() {
 }
 
 export async function reorderItem(itemId: string) {
+    await checkRole('editor');
     if (!token) {
         throw new Error("Missing SANITY_API_TOKEN");
     }
@@ -108,6 +122,7 @@ export async function reorderItem(itemId: string) {
 }
 
 export async function requestRepair(itemId: string, issueDescription: string = "Repair Requested") {
+    await checkRole('editor');
     if (!token) throw new Error("Missing SANITY_API_TOKEN");
 
     const query = `*[_type == "inventoryItem" && itemId == $itemId][0]{_id, name, itemId, owner->{name}, category}`;
@@ -142,6 +157,7 @@ export async function requestRepair(itemId: string, issueDescription: string = "
 }
 
 export async function approveItem(itemId: string) {
+    await checkRole('admin');
     if (!token) throw new Error("Missing SANITY_API_TOKEN");
 
     const query = `*[_type == "inventoryItem" && itemId == $itemId][0]{_id, name, category, equipmentStatus}`;
@@ -174,6 +190,7 @@ export async function approveItem(itemId: string) {
 }
 
 export async function updateEquipmentStatus(itemId: string, status: string) {
+    await checkRole('editor');
     if (!token) throw new Error("Missing SANITY_API_TOKEN");
 
     const query = `*[_type == "inventoryItem" && itemId == $itemId][0]{_id, name}`;
@@ -201,6 +218,7 @@ export async function updateEquipmentStatus(itemId: string, status: string) {
 }
 
 export async function updateStock(itemId: string, newStock: number) {
+    await checkRole('editor');
     if (!token) {
         console.error("Missing SANITY_API_TOKEN in updateStock");
         return { success: false, error: "Server Configuration Error: Missing Token" };
@@ -257,6 +275,7 @@ export async function getItemDetails(itemId: string) {
 }
 
 export async function receiveItem(itemId: string, quantityReceived: number, imageBase64?: string) {
+    await checkRole('editor');
     if (!token) throw new Error("Missing SANITY_API_TOKEN");
 
     const item = await getItemDetails(itemId);
@@ -317,6 +336,7 @@ export async function receiveItem(itemId: string, quantityReceived: number, imag
 }
 
 export async function updateItemOwner(itemId: string, ownerId: string) {
+    await checkRole('editor');
     if (!token) throw new Error("Missing SANITY_API_TOKEN");
 
     const item = await getItemDetails(itemId);
@@ -438,6 +458,7 @@ export async function createInventoryItem(data: {
     imageBase64?: string; // Optional: Base64 image data
     isPlasmid?: boolean; // New flag
 }) {
+    await checkRole('editor');
     if (!token) throw new Error("Missing SANITY_API_TOKEN");
 
     let finalItemId = undefined;
@@ -555,6 +576,7 @@ export async function getAllLocations() {
 }
 
 export async function updateItemLocation(itemId: string, newLocation: string) {
+    await checkRole('editor');
     if (!token) throw new Error("Missing SANITY_API_TOKEN");
 
     const item = await getItemDetails(itemId);
@@ -574,6 +596,7 @@ export async function updateItemLocation(itemId: string, newLocation: string) {
 }
 
 export async function addInventoryNote(itemId: string, content: string) {
+    await checkRole('editor');
     if (!token) throw new Error("Missing SANITY_API_TOKEN");
 
     const item = await getItemDetails(itemId);

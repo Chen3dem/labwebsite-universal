@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Scan, ClipboardList, FlaskConical, LogOut, Box, ShoppingCart, ArrowRight } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 
 
 import { ApproveButton } from "./approval-button";
@@ -48,6 +49,17 @@ export default async function IntranetPage() {
         },
     ];
 
+    // Check Role
+    const { sessionClaims } = await auth();
+    const metadata = (sessionClaims?.metadata as { role?: string }) || {};
+    const role = metadata.role || 'viewer';
+
+    // Filter out Receiving for Viewers
+    const visibleItems = menuItems.filter(item => {
+        if (item.title === "Receiving" && role === 'viewer') return false;
+        return true;
+    });
+
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col pt-32">
             <header className="bg-white shadow-sm p-4 flex justify-between items-center sticky top-24 z-10 transition-[top] duration-300">
@@ -59,7 +71,7 @@ export default async function IntranetPage() {
 
             <main className="flex-1 p-6 flex flex-col gap-6 max-w-md mx-auto w-full">
                 <div className="grid grid-cols-1 gap-6">
-                    {menuItems.map((item) => (
+                    {visibleItems.map((item) => (
                         <Link
                             key={item.title}
                             href={item.href}

@@ -2,6 +2,7 @@ import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
 import { visionTool } from '@sanity/vision';
 import { schemaTypes } from './sanity/schemaTypes';
+import { compressedImageSource } from './sanity/plugins/compressed-image-source';
 
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!;
@@ -37,5 +38,13 @@ export default defineConfig({
   ],
   schema: {
     types: schemaTypes,
+  },
+  form: {
+    image: {
+      assetSources: () => {
+        // Enforce compressed upload by ignoring default sources (like raw upload)
+        return [compressedImageSource];
+      },
+    },
   },
 });
